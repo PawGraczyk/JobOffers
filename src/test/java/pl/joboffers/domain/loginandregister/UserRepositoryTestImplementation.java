@@ -2,23 +2,21 @@ package pl.joboffers.domain.loginandregister;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 
-public class UserRepositoryTestImplementation implements UserRepository{
+public class UserRepositoryTestImplementation implements UserRepository {
 
-    private Map<String, User> inMemoryUsersDatabase = Map.of(
-            ("TestUsername"), new User("TestUsername", "12345"),
-            ("AnotherUser"), new User("AnotherUser", "qwerty")
-            );
+    private final Map<String, User> inMemoryUserDatabase = new ConcurrentHashMap<>();
 
     @Override
-    public User save(User user) {
-        //TO DO
-        return null;
+    public Optional<User> findByUsername(String inputUsername) {
+        return Optional.ofNullable(inMemoryUserDatabase.get(inputUsername));
     }
 
     @Override
-    public Optional<User> findUserByUsername(String inputUsername) {
-        return Optional.ofNullable(inMemoryUsersDatabase.get(inputUsername));
+    public User register(User user) {
+        inMemoryUserDatabase.put(user.username(), user);
+        return user;
     }
 }

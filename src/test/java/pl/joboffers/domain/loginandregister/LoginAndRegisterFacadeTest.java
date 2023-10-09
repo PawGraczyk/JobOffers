@@ -2,9 +2,11 @@ package pl.joboffers.domain.loginandregister;
 
 import org.junit.jupiter.api.Test;
 import pl.joboffers.domain.loginandregister.dto.RegistrationMessageDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -16,18 +18,20 @@ class LoginAndRegisterFacadeTest {
     @Test
     public void should_return_user_by_given_username() {
         //given
-        loginAndRegisterFacade.registerNewUser("AnotherUser", "qwerty");
-        String inputUsername = "AnotherUser";
+        RegistrationUserDto registrationUser = RegistrationUserDto.builder()
+                .username("Username")
+                .password("qwerty")
+                .build();
+        loginAndRegisterFacade.registerNewUser(registrationUser);
         //when
-        UserDto result = loginAndRegisterFacade.findUserByUsername(inputUsername);
+        UserDto result = loginAndRegisterFacade.findUserByUsername(registrationUser.username());
         //then
         assertThat(result).isEqualTo(UserDto.builder()
+                .id(result.id())
                 .username(result.username())
                 .password(result.password())
                 .build());
-
     }
-
     @Test
     public void should_throw_exception_when_no_user_found() {
         //given
@@ -38,37 +42,18 @@ class LoginAndRegisterFacadeTest {
     }
 
     @Test
-    public void should_return_failure_message_when_saving_already_existing_user() {
+    public void should_return_success_message_when_saving_new_user() {
         //given
-        String inputUsername = "ExistingUser";
-        String inputPassword = "12345";
-        loginAndRegisterFacade.registerNewUser(inputUsername, inputPassword);
+        RegistrationUserDto registrationUser = RegistrationUserDto.builder()
+                .username("Username")
+                .password("qwerty")
+                .build();
         //when
-        RegistrationMessageDto registrationMessageDto = loginAndRegisterFacade.registerNewUser("ExistingUser", "qwerty");
+        RegistrationMessageDto registrationMessageDto = loginAndRegisterFacade.registerNewUser(registrationUser);
         //then
-        assertThat(registrationMessageDto).isEqualTo(RegistrationMessageDto
-                .builder()
-                .message(RegistrationTextMessageType.FAILURE)
-                .build()
+        assertAll(
+                () -> assertThat(registrationMessageDto.username()).isEqualTo(registrationUser.username()),
+                () -> assertThat(registrationMessageDto.message()).isEqualTo(RegistrationTextMessageType.SUCCESS)
         );
     }
-    @Test
-    public void should_return_success_message_when_saving_new_user(){
-        //given
-        String inputUsername = "ExistingUser";
-        String inputPassword = "12345";
-        //when
-        RegistrationMessageDto registrationMessageDto = loginAndRegisterFacade.registerNewUser(inputUsername, inputPassword);
-        //then
-        assertThat(registrationMessageDto).isEqualTo(RegistrationMessageDto
-                .builder()
-                        .username(inputUsername)
-                        .password(inputPassword)
-                        .message(RegistrationTextMessageType.SUCCESS)
-                .build()
-        );
-
-
-    }
-
 }

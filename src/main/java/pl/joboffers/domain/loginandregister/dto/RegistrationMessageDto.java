@@ -6,8 +6,8 @@ import pl.joboffers.domain.loginandregister.RegistrationTextMessageType;
 
 @Builder
 public record RegistrationMessageDto(
+        String id,
         String username,
-        String password,
         RegistrationTextMessageType message
 ) {
 }

@@ -2,6 +2,7 @@ package pl.joboffers.domain.loginandregister;
 
 import lombok.AllArgsConstructor;
 import pl.joboffers.domain.loginandregister.dto.RegistrationMessageDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
 
 @AllArgsConstructor
@@ -11,25 +12,19 @@ public class LoginAndRegisterFacade {
 
     public UserDto findUserByUsername(String inputUsername) {
         return repository.findByUsername(inputUsername)
-                .map(UserMapper::mapFromUser)
+                .map(UserMapper::mapFromUserToUserDto)
                 .orElseThrow(() -> new UserNotFoundException("No user with username " + inputUsername + " found"));
     }
 
-    public RegistrationMessageDto registerNewUser(String inputUsername, String inputPassword){
-        try {
-            findUserByUsername(inputUsername);
-            return RegistrationMessageDto.builder()
-                    .message(RegistrationTextMessageType.FAILURE)
-                    .build();
-        } catch (UserNotFoundException ex){
-            User newUser = repository.register(new User(inputUsername, inputPassword));
-            return RegistrationMessageDto.builder()
-                    .username(newUser.username())
-                    .password(newUser.password())
-                    .message(RegistrationTextMessageType.SUCCESS)
-                    .build();
+    public RegistrationMessageDto registerNewUser(RegistrationUserDto registrationUserDto) {
+        User user = UserMapper.mapFromRegistrationUserDtoToUser(registrationUserDto);
+        User registeredUser = repository.register(user);
+        return RegistrationMessageDto.builder()
+                .id(registeredUser.id())
+                .username(registeredUser.username())
+                .message(RegistrationTextMessageType.SUCCESS)
+                .build();
 
-        }
     }
 
 }

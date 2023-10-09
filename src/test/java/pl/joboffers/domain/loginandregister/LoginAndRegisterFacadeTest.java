@@ -1,6 +1,7 @@
 package pl.joboffers.domain.loginandregister;
 
 import org.junit.jupiter.api.Test;
+import pl.joboffers.domain.loginandregister.dto.FindByUsernameRequestDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationMessageDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
@@ -22,9 +23,12 @@ class LoginAndRegisterFacadeTest {
                 .username("Username")
                 .password("qwerty")
                 .build();
-        loginAndRegisterFacade.registerNewUser(registrationUser);
+        RegistrationMessageDto registrationMessageDto = loginAndRegisterFacade.registerNewUser(registrationUser);
+        FindByUsernameRequestDto requestDto = FindByUsernameRequestDto.builder()
+                .username(registrationMessageDto.username())
+                .build();
         //when
-        UserDto result = loginAndRegisterFacade.findUserByUsername(registrationUser.username());
+        UserDto result = loginAndRegisterFacade.findUserByUsername(requestDto);
         //then
         assertThat(result).isEqualTo(UserDto.builder()
                 .id(result.id())
@@ -35,10 +39,14 @@ class LoginAndRegisterFacadeTest {
     @Test
     public void should_throw_exception_when_no_user_found() {
         //given
-        String inputUsername = "NotExistingUser";
+        FindByUsernameRequestDto requestDto = FindByUsernameRequestDto.builder()
+                .username("NotExistingUser")
+                .build();
         //when
         //then
-        assertThrows(UserNotFoundException.class, () -> loginAndRegisterFacade.findUserByUsername(inputUsername), "No user with username " + inputUsername + " found");
+        assertThrows(UserNotFoundException.class,
+                () -> loginAndRegisterFacade.findUserByUsername(requestDto),
+                "User not found.");
     }
 
     @Test
@@ -53,7 +61,7 @@ class LoginAndRegisterFacadeTest {
         //then
         assertAll(
                 () -> assertThat(registrationMessageDto.username()).isEqualTo(registrationUser.username()),
-                () -> assertThat(registrationMessageDto.message()).isEqualTo(RegistrationTextMessageType.SUCCESS)
+                () -> assertThat(registrationMessageDto.isRegistered()).isEqualTo(true)
         );
     }
 }

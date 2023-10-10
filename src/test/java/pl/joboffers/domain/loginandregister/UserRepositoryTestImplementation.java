@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserRepositoryTestImplementation implements UserRepository {
 
+    private final static String USER_ALREADY_EXISTS_MESSAGE = "User already exists";
+
     private final Map<String, User> inMemoryUserDatabase = new ConcurrentHashMap<>();
 
     @Override
@@ -16,7 +18,11 @@ public class UserRepositoryTestImplementation implements UserRepository {
 
     @Override
     public User register(User user) {
-        inMemoryUserDatabase.put(user.username(), user);
-        return user;
+        if (inMemoryUserDatabase.containsKey(user.username())) {
+            throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
+        } else {
+            inMemoryUserDatabase.put(user.username(), user);
+            return user;
+        }
     }
 }

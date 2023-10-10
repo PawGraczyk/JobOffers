@@ -2,7 +2,7 @@ package pl.joboffers.domain.loginandregister;
 
 import org.junit.jupiter.api.Test;
 import pl.joboffers.domain.loginandregister.dto.FindByUsernameRequestDto;
-import pl.joboffers.domain.loginandregister.dto.RegistrationMessageDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
 
@@ -23,9 +23,9 @@ class LoginAndRegisterFacadeTest {
                 .username("Username")
                 .password("qwerty")
                 .build();
-        RegistrationMessageDto registrationMessageDto = loginAndRegisterFacade.registerNewUser(registrationUser);
+        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerNewUser(registrationUser);
         FindByUsernameRequestDto requestDto = FindByUsernameRequestDto.builder()
-                .username(registrationMessageDto.username())
+                .username(registrationResultDto.username())
                 .build();
         //when
         UserDto result = loginAndRegisterFacade.findUserByUsername(requestDto);
@@ -36,6 +36,7 @@ class LoginAndRegisterFacadeTest {
                 .password(result.password())
                 .build());
     }
+
     @Test
     public void should_throw_exception_when_no_user_found() {
         //given
@@ -50,18 +51,35 @@ class LoginAndRegisterFacadeTest {
     }
 
     @Test
-    public void should_return_success_message_when_saving_new_user() {
+    public void should_return_successful_result_when_registering_new_user() {
         //given
         RegistrationUserDto registrationUser = RegistrationUserDto.builder()
                 .username("Username")
                 .password("qwerty")
                 .build();
         //when
-        RegistrationMessageDto registrationMessageDto = loginAndRegisterFacade.registerNewUser(registrationUser);
+        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerNewUser(registrationUser);
         //then
         assertAll(
-                () -> assertThat(registrationMessageDto.username()).isEqualTo(registrationUser.username()),
-                () -> assertThat(registrationMessageDto.isRegistered()).isEqualTo(true)
+                () -> assertThat(registrationResultDto.username()).isEqualTo(registrationUser.username()),
+                () -> assertThat(registrationResultDto.isRegistered()).isEqualTo(true)
         );
+    }
+
+    @Test
+    public void should_return_negative_result_when_registering_existing_username() {
+        //given
+        RegistrationUserDto registrationUserDto = RegistrationUserDto.builder()
+                .username("Username")
+                .password("qwerty")
+                .build();
+        loginAndRegisterFacade.registerNewUser(registrationUserDto);
+        //when
+        RegistrationResultDto secondRegistration = loginAndRegisterFacade.registerNewUser(registrationUserDto);
+        //then
+        assertAll(
+                () -> assertThat(secondRegistration.username()).isEqualTo(registrationUserDto.username()),
+                () -> assertThat(secondRegistration.isRegistered()).isEqualTo(false));
+
     }
 }

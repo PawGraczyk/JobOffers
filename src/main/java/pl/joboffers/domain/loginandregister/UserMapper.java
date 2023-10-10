@@ -12,7 +12,8 @@ class UserMapper {
                 .password(user.password())
                 .build();
     }
-    public static User mapFromRegistrationUserDtoToUser(RegistrationUserDto registrationUserDto){
+
+    public static User mapFromRegistrationUserDtoToUser(RegistrationUserDto registrationUserDto) {
         return User.builder()
                 .username(registrationUserDto.username())
                 .password(registrationUserDto.password())

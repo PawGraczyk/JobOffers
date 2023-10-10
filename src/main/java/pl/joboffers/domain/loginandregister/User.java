@@ -2,6 +2,7 @@ package pl.joboffers.domain.loginandregister;
 
 import lombok.Builder;
 
+
 @Builder
 record User(
         String id,

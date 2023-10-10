@@ -1,7 +1,7 @@
 package pl.joboffers.domain.loginandregister;
 
 import org.junit.jupiter.api.Test;
-import pl.joboffers.domain.loginandregister.dto.FindByUsernameRequestDto;
+import pl.joboffers.domain.loginandregister.dto.UserRequestDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
@@ -24,7 +24,7 @@ class LoginAndRegisterFacadeTest {
                 .password("qwerty")
                 .build();
         RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerNewUser(registrationUser);
-        FindByUsernameRequestDto requestDto = FindByUsernameRequestDto.builder()
+        UserRequestDto requestDto = UserRequestDto.builder()
                 .username(registrationResultDto.username())
                 .build();
         //when
@@ -40,7 +40,7 @@ class LoginAndRegisterFacadeTest {
     @Test
     public void should_throw_exception_when_no_user_found() {
         //given
-        FindByUsernameRequestDto requestDto = FindByUsernameRequestDto.builder()
+        UserRequestDto requestDto = UserRequestDto.builder()
                 .username("NotExistingUser")
                 .build();
         //when

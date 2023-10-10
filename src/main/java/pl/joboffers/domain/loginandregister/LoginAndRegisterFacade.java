@@ -1,7 +1,7 @@
 package pl.joboffers.domain.loginandregister;
 
 import lombok.AllArgsConstructor;
-import pl.joboffers.domain.loginandregister.dto.FindByUsernameRequestDto;
+import pl.joboffers.domain.loginandregister.dto.UserRequestDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
@@ -12,8 +12,8 @@ public class LoginAndRegisterFacade {
     private final static String USER_NOT_FOUND_MESSAGE = "User not found.";
     private final UserRepository repository;
 
-    public UserDto findUserByUsername(FindByUsernameRequestDto inputUsernameRequest) {
-        return repository.findByUsername(inputUsernameRequest.username())
+    public UserDto findUserByUsername(UserRequestDto requestByUsername) {
+        return repository.findByUsername(requestByUsername)
                 .map(UserMapper::mapFromUserToUserDto)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
     }

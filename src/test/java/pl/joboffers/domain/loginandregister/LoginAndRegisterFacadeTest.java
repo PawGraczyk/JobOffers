@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class LoginAndRegisterFacadeTest {
+public class LoginAndRegisterFacadeTest {
     private final LoginAndRegisterFacade loginAndRegisterFacade = new LoginAndRegisterFacade(
             new UserRepositoryTestImplementation()
     );

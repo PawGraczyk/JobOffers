@@ -2,13 +2,12 @@ package pl.joboffers.domain.offer.dto;
 
 import lombok.Builder;
 
-import java.net.URL;
-
 @Builder
-public record OfferDto(
-        String id,
+public record OfferRequestDto(
+        String company,
         String title,
         String salary,
-        URL offerUrl
+        String offerUrl
 ) {
 }
+

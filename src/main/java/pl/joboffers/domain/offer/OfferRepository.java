@@ -1,11 +1,14 @@
 package pl.joboffers.domain.offer;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 public interface OfferRepository {
-    Set<Offer> findAllOffers();
-    Optional<Offer> findOfferById(String inputId);
-    Offer saveOffer();
+    List<Offer> findAll();
+
+    Optional<Offer> findById(String inputId);
+
+    Offer save(Offer offer);
 
 }

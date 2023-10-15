@@ -1,9 +1,9 @@
-package pl.joboffers.domain.offer;
+package pl.joboffers.domain.offer.dto;
 
 import lombok.Builder;
 
 @Builder
-record Offer(
+public record OfferResponseDto(
         String id,
         String company,
         String title,

@@ -1,9 +1,11 @@
 package pl.joboffers.domain.offer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 public class OfferRepositoryTestImplementation implements OfferRepository {
 
@@ -11,17 +13,22 @@ public class OfferRepositoryTestImplementation implements OfferRepository {
 
 
     @Override
-    public Set<Offer> findAllOffers() {
-        return null;
+    public List<Offer> findAll() {
+        return new ArrayList<>(inMemoryOfferDatabase.values());
     }
 
     @Override
-    public Optional<Offer> findOfferById(String inputId) {
+    public Optional<Offer> findById(String inputId) {
         return Optional.ofNullable(inMemoryOfferDatabase.get(inputId));
     }
 
     @Override
-    public Offer saveOffer() {
-        return null;
+    public Offer save(Offer offer) {
+        boolean offerAlreadyExists = inMemoryOfferDatabase.values().stream().anyMatch(offerInDatabase -> offerInDatabase.offerUrl().equals(offer.offerUrl()));
+        if (offerAlreadyExists) {
+            throw new OfferUniqueConstraintViolationException("Entity already exists in the database");
+        }
+        inMemoryOfferDatabase.put(offer.offerUrl(), offer);
+        return offer;
     }
 }

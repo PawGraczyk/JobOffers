@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 import pl.joboffers.domain.offer.dto.FindByIdRequestDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
+import pl.joboffers.domain.offersfetcher.OffersFetcherFacade;
+import pl.joboffers.domain.offersfetcher.OffersFetcherTestImplementation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class OfferFacadeTest {
 
     private final OfferFacade offerFacade = new OfferFacade(
-            new OfferRepositoryTestImplementation()
+            new OfferRepositoryTestImplementation(),
+            new OffersFetcherFacade(
+                    new OffersFetcherTestImplementation())
     );
 
     @Test
@@ -82,6 +87,5 @@ public class OfferFacadeTest {
                 () -> offerFacade.saveOffer(offerRequestDto),
                 "Entity already exists in the database");
     }
-
 
 }

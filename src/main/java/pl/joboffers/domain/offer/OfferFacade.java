@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import pl.joboffers.domain.offer.dto.FindByIdRequestDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
+import pl.joboffers.domain.offersfetcher.OffersFetcherFacade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class OfferFacade {
 
     private final static String OFFER_NOT_FOUND_MESSAGE = "Offer not found";
     private final OfferRepository repository;
+    private final OffersFetcherFacade fetcherFacade;
 
     public List<OfferResponseDto> findAllOffers() {
         return repository.findAll()
@@ -33,6 +35,10 @@ public class OfferFacade {
         Offer offer = OfferMapper.mapFromOfferDtoToOffer(offerRequestDto);
         Offer savedOffer = repository.save(offer);
         return OfferMapper.mapFromOfferToOfferDto(savedOffer);
+    }
+
+    public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
+        return null;
     }
 
 }

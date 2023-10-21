@@ -17,7 +17,7 @@ class OffersFetcherTestConfiguration {
                         new RemoteJobOfferDto("TestCompany5", "TestTitle5", "TestSalary5", "TestUrl5"),
                         new RemoteJobOfferDto("TestCompany6", "TestTitle6", "TestSalary6", "UniqueUrl6"),
                         new RemoteJobOfferDto("TestCompany7", "TestTitle7", "TestSalary7", "UniqueUrl7")
-                        )
+                )
         );
 
     }

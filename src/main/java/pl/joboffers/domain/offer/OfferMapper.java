@@ -25,7 +25,7 @@ public class OfferMapper {
                 .build();
     }
 
-    public static Offer mapFromRemoteJobOfferToOffer(RemoteJobOfferDto jobOfferDto){
+    public static Offer mapFromRemoteJobOfferToOffer(RemoteJobOfferDto jobOfferDto) {
         return Offer.builder()
                 .company(jobOfferDto.company())
                 .title(jobOfferDto.title())

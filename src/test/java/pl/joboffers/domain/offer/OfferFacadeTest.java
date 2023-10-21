@@ -6,7 +6,6 @@ import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.domain.offersfetcher.OffersFetcherFacade;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

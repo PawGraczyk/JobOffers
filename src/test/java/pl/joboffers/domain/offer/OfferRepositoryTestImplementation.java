@@ -9,8 +9,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class OfferRepositoryTestImplementation implements OfferRepository {
 
-    private final Map<String, Offer> inMemoryOfferDatabase = new ConcurrentHashMap<>();
+    private final Map<String, Offer> inMemoryOfferDatabase;
 
+    public OfferRepositoryTestImplementation() {
+        inMemoryOfferDatabase = new ConcurrentHashMap<>();
+    }
+
+    public OfferRepositoryTestImplementation(Map<String, Offer> inMemoryOfferDatabase) {
+        this.inMemoryOfferDatabase = inMemoryOfferDatabase;
+    }
 
     @Override
     public List<Offer> findAll() {

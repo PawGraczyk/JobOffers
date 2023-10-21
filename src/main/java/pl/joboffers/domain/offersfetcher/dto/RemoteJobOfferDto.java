@@ -1,5 +1,7 @@
 package pl.joboffers.domain.offersfetcher.dto;
 
+
+
 public record RemoteJobOfferDto(
         String company,
         String title,

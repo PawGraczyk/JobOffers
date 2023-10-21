@@ -2,6 +2,7 @@ package pl.joboffers.domain.offer;
 
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
+import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
 
 public class OfferMapper {
 
@@ -21,6 +22,15 @@ public class OfferMapper {
                 .title(offerRequestDto.title())
                 .salary(offerRequestDto.salary())
                 .offerUrl(offerRequestDto.offerUrl())
+                .build();
+    }
+
+    public static Offer mapFromRemoteJobOfferToOffer(RemoteJobOfferDto jobOfferDto){
+        return Offer.builder()
+                .company(jobOfferDto.company())
+                .title(jobOfferDto.title())
+                .salary(jobOfferDto.salary())
+                .offerUrl(jobOfferDto.offerUrl())
                 .build();
     }
 }

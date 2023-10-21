@@ -5,11 +5,11 @@ import pl.joboffers.domain.offer.dto.FindByIdRequestDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.domain.offersfetcher.OffersFetcherFacade;
-import pl.joboffers.domain.offersfetcher.OffersFetcherTestImplementation;
 
-import java.util.ArrayList;
-import java.util.Collection;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,19 +17,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OfferFacadeTest {
 
-    private final OfferFacade offerFacade = new OfferFacade(
-            new OfferRepositoryTestImplementation(),
+    private final OfferRepository repository = new OfferRepositoryTestImplementation();
+    private final OfferFacade testOfferFacadeWithoutPreConfig = new OfferFacade(
+            repository,
             new OffersFetcherFacade(
-                    new OffersFetcherTestImplementation())
+                    new OffersFetcherInOfferFacadeTestImplementation()
+            ),
+            new OfferService(repository)
     );
 
     @Test
-    public void shouldReturnCollectionOfAllOffersFromDatabase() {
+    public void find_all_offers_should_not_return_null() {
         //given
         //when
-        List<OfferResponseDto> allOffers = offerFacade.findAllOffers();
+        List<OfferResponseDto> allOffers = testOfferFacadeWithoutPreConfig.findAllOffers();
         // then
-        assertThat(allOffers).isInstanceOf(Collection.class);
+        assertThat(allOffers).isNotNull();
     }
 
     @Test
@@ -41,7 +44,7 @@ public class OfferFacadeTest {
         //when
         //then
         assertThrows(OfferNotFoundException.class,
-                () -> offerFacade.findOfferById(requestedId),
+                () -> testOfferFacadeWithoutPreConfig.findOfferById(requestedId),
                 "Offer not found");
     }
 
@@ -56,7 +59,7 @@ public class OfferFacadeTest {
                 .offerUrl("www.example.com.pl")
                 .build();
         //when
-        OfferResponseDto offerResponseDto = offerFacade.saveOffer(offerRequestDto);
+        OfferResponseDto offerResponseDto = testOfferFacadeWithoutPreConfig.saveOffer(offerRequestDto);
 
         //then
         assertThat(offerResponseDto).isEqualTo(
@@ -81,11 +84,53 @@ public class OfferFacadeTest {
                 .offerUrl("www.example.com.pl")
                 .build();
         // when
-        offerFacade.saveOffer(offerRequestDto);
+        testOfferFacadeWithoutPreConfig.saveOffer(offerRequestDto);
         //then
         assertThrows(OfferUniqueConstraintViolationException.class,
-                () -> offerFacade.saveOffer(offerRequestDto),
+                () -> testOfferFacadeWithoutPreConfig.saveOffer(offerRequestDto),
                 "Entity already exists in the database");
     }
 
+    @Test
+    public void should_save_2_fetched_offers_that_not_exist_in_repository() {
+        //given
+        final Map<String, Offer> testData = new HashMap<>();
+        testData.put("TestUrl1", new Offer(null, "TestCompany1", "TestTitle1", "TestSalary1", "TestUrl1"));
+        testData.put("TestUrl2", new Offer(null, "TestCompany2", "TestTitle2", "TestSalary2", "TestUrl2"));
+        testData.put("TestUrl3", new Offer(null, "TestCompany3", "TestTitle3", "TestSalary3", "TestUrl3"));
+        testData.put("TestUrl4", new Offer(null, "TestCompany4", "TestTitle4", "TestSalary4", "TestUrl4"));
+        testData.put("TestUrl5", new Offer(null, "TestCompany5", "TestTitle5", "TestSalary5", "TestUrl5"));
+        var offerFacadeForTest = new OfferFacadeTestConfiguration().getOfferFacadeForTest(testData);
+        // when
+        List<OfferResponseDto> offerResponseDtos = offerFacadeForTest.fetchAllOffersAndSaveAllIfNotExists();
+        //then
+        assertThat(offerResponseDtos).containsExactlyInAnyOrder(
+                new OfferResponseDto(null, "TestCompany6", "TestTitle6", "TestSalary6", "UniqueUrl1"),
+                new OfferResponseDto(null, "TestCompany7", "TestTitle7", "TestSalary7", "UniqueUrl2")
+        );
+        assertThat(offerResponseDtos.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void should_save_4_fetched_offers_that_not_exist_in_repository() {
+        //given
+        final Map<String, Offer> testData = new HashMap<>();
+        testData.put("TestUrl1", new Offer(null, "TestCompany1", "TestTitle1", "TestSalary1", "TestUrl1"));
+        testData.put("TestUrl2", new Offer(null, "TestCompany2", "TestTitle2", "TestSalary2", "TestUrl2"));
+        testData.put("TestUrl3", new Offer(null, "TestCompany3", "TestTitle3", "TestSalary3", "TestUrl3"));
+        var offerFacadeForTest = new OfferFacadeTestConfiguration().getOfferFacadeForTest(testData);
+        // when
+        List<OfferResponseDto> offerResponseDtos = offerFacadeForTest.fetchAllOffersAndSaveAllIfNotExists();
+        //then
+        assertThat(offerResponseDtos).containsExactlyInAnyOrder(
+                new OfferResponseDto(null, "TestCompany4", "TestTitle4", "TestSalary4", "TestUrl4"),
+                new OfferResponseDto(null, "TestCompany5", "TestTitle5", "TestSalary5", "TestUrl5"),
+                new OfferResponseDto(null, "TestCompany6", "TestTitle6", "TestSalary6", "UniqueUrl1"),
+                new OfferResponseDto(null, "TestCompany7", "TestTitle7", "TestSalary7", "UniqueUrl2")
+        );
+        assertThat(offerResponseDtos.size()).isEqualTo(4);
+    }
+
 }
+
+

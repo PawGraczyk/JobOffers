@@ -5,6 +5,7 @@ import pl.joboffers.domain.offer.dto.FindByIdRequestDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.domain.offersfetcher.OffersFetcherFacade;
+import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class OfferFacade {
     private final static String OFFER_NOT_FOUND_MESSAGE = "Offer not found";
     private final OfferRepository repository;
     private final OffersFetcherFacade fetcherFacade;
+    private final OfferService offerService;
 
     public List<OfferResponseDto> findAllOffers() {
         return repository.findAll()
@@ -38,7 +40,7 @@ public class OfferFacade {
     }
 
     public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
-        return null;
+        List<RemoteJobOfferDto> fetchedRemoteJobOffers = fetcherFacade.fetchRemoteJobOffers();
+        return offerService.saveUniqueOffers(fetchedRemoteJobOffers);
     }
-
 }

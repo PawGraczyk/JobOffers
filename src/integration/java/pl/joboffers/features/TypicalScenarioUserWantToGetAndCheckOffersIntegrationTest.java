@@ -1,15 +1,16 @@
-package pl.joboffers.feature;
+package pl.joboffers.features;
 
 import org.junit.jupiter.api.Test;
 import pl.joboffers.BaseIntegrationTest;
 
-public class UserSuccessfulyLoggedInIntegrationTest extends BaseIntegrationTest {
+public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void should_fetch_data_from_external_api() {
         /*
         # typical path: user want to see offers but have to be logged in and external server should have some offers
-        //step 1: there are no offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
+        step 0: external service returns job offers
+        step 1: there are no offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
         step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
         step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)

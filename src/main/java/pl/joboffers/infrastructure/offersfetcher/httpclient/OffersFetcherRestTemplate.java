@@ -28,31 +28,35 @@ public class OffersFetcherRestTemplate implements OfferFetchable {
     @Override
     public List<RemoteJobOfferDto> fetchOffers() {
         log.info(logFetchInfo.FETCH_STARTED);
-        List<RemoteJobOfferDto> remoteJobOfferDtos;
         String urlForService = getUrlForService();
         HttpHeaders httpHeaders = prepareHeaders();
         final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(httpHeaders);
         final String url = UriComponentsBuilder.fromHttpUrl(urlForService)
                 .toUriString();
         try {
-            ResponseEntity<List<RemoteJobOfferDto>> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    requestEntity,
-                    new ParameterizedTypeReference<>() {
-                    });
-
-            remoteJobOfferDtos = response.getBody();
-            if (remoteJobOfferDtos != null && remoteJobOfferDtos.isEmpty()) {
-                log.info(logFetchInfo.FETCHED_EMPTY_BODY);
-                return Collections.emptyList();
-            }
-            log.info(logFetchInfo.FETCHED_SUCCESSFULLY);
-            return remoteJobOfferDtos;
+            return makeRequest(url, requestEntity);
         } catch (ResourceAccessException e) {
             log.error(logFetchInfo.ERROR_WHILE_FETCHING);
             return Collections.emptyList();
         }
+    }
+
+    private List<RemoteJobOfferDto> makeRequest(String url, HttpEntity<HttpHeaders> requestEntity) {
+        List<RemoteJobOfferDto> remoteJobOfferDtos;
+        ResponseEntity<List<RemoteJobOfferDto>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        remoteJobOfferDtos = response.getBody();
+        if (remoteJobOfferDtos != null && remoteJobOfferDtos.isEmpty()) {
+            log.info(logFetchInfo.FETCHED_EMPTY_BODY);
+            return Collections.emptyList();
+        }
+        log.info(logFetchInfo.FETCHED_SUCCESSFULLY);
+        return remoteJobOfferDtos;
     }
 
     private HttpHeaders prepareHeaders() {

@@ -5,38 +5,42 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import pl.joboffers.BaseIntegrationTest;
+import pl.joboffers.SampleHttpResponse;
 import pl.joboffers.domain.offersfetcher.OfferFetchable;
+import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
+
+import java.util.List;
 
 public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     OfferFetchable offersFetcher;
+    @Autowired
+    SampleHttpResponse httpResponse;
 
     @Test
-    public void should_fetch_data_from_external_api() {
-
-
+    public void user_has_to_be_authenticated_and_api_should_have_offers() {
         //# typical path: user want to see offers but have to be logged in and external server should have some offers
         //step 0: external service returns job offers
-        // given
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                [{"title":"Junior Java Developer","company":"BlueSoft Sp. z o.o.","salary":"7 000 – 9 000 PLN","offerUrl":"https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"},
-                                {"title":"Java (CMS) Developer","company":"Efigence SA","salary":"16 000 – 18 000 PLN","offerUrl":"https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"},
-                                {"title":"Junior Java Developer","company":"Sollers Consulting","salary":"7 500 – 11 500 PLN","offerUrl":"https://nofluffjobs.com/pl/job/junior-java-developer-sollers-consulting-warszawa-s6et1ucc"}])
-                                """)
+                        .withBody(httpResponse.responseWithFourObjects())
 
                 ));
-        // when
-        offersFetcher.fetchOffers();
-        // then
-
-
+        List<RemoteJobOfferDto> remoteJobOffers = offersFetcher.fetchOffers();
 
         // step 1: there are no offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
+        wireMockServer.stubFor(WireMock.get("/offers")
+                .willReturn(WireMock.aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(httpResponse.emptyResponse())
+
+                ));
+        List<RemoteJobOfferDto> emptyList = offersFetcher.fetchOffers();
+
         // step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         // step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
         // step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)

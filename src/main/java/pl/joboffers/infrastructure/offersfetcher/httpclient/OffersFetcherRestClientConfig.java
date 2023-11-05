@@ -30,7 +30,8 @@ public class OffersFetcherRestClientConfig {
     @Bean
     public OfferFetchable offersFetcherRemoteClient(RestTemplate restTemplate,
                                                     @Value("${joboffers.offers-fetcher.http.client.config.uri}") String uri,
-                                                    @Value("${joboffers.offers-fetcher.http.client.config.port}") int port) {
-        return new OffersFetcherRestTemplate(restTemplate, uri, port);
+                                                    @Value("${joboffers.offers-fetcher.http.client.config.port}") int port,
+                                                    @Value("${joboffers.offers-fetcher.http.client.config.service}") String service) {
+        return new OffersFetcherRestTemplate(restTemplate, uri, port, service);
     }
 }

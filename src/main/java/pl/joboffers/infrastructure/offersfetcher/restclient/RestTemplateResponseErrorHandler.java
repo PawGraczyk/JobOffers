@@ -1,4 +1,4 @@
-package pl.joboffers.infrastructure.offersfetcher.httpclient;
+package pl.joboffers.infrastructure.offersfetcher.restclient;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

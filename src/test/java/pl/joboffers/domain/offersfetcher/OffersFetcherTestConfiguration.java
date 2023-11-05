@@ -6,7 +6,7 @@ import java.util.List;
 
 class OffersFetcherTestConfiguration {
 
-    private final OfferFetchable fetcherTestImplementation;
+    private final OffersFetchable fetcherTestImplementation;
 
     public OffersFetcherTestConfiguration() {
         this.fetcherTestImplementation = new OffersFetcherTestImplementation(

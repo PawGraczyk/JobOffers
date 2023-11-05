@@ -39,7 +39,7 @@ public class OfferFacade {
         return OfferMapper.mapFromOfferToOfferDto(savedOffer);
     }
 
-    public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
+    public List<OfferResponseDto> fetchAllOffersAndSaveIfNotExists() {
         List<RemoteJobOfferDto> fetchedRemoteJobOffers = fetcherFacade.fetchRemoteJobOffers();
         return offerService.saveUniqueOffers(fetchedRemoteJobOffers);
     }

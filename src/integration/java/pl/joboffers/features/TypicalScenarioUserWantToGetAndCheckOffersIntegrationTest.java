@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.SampleHttpResponse;
-import pl.joboffers.domain.offersfetcher.OfferFetchable;
+import pl.joboffers.domain.offersfetcher.OffersFetchable;
 import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    OfferFetchable offersFetcher;
+    OffersFetchable offersFetcher;
     @Autowired
     SampleHttpResponse httpResponse;
 

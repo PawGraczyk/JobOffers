@@ -1,6 +1,7 @@
 package pl.joboffers;
 
 import org.springframework.stereotype.Component;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.util.JSONPObject;
 
 @Component
 public class JsonResponse implements SampleHttpResponse {

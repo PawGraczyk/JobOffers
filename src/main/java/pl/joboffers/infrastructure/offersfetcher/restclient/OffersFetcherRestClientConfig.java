@@ -14,14 +14,14 @@ import java.time.Duration;
 @AllArgsConstructor
 public class OffersFetcherRestClientConfig {
 
-
+    private final OffersFetcherRestTemplateConfigurationProperties properties;
     @Bean
     public RestTemplateResponseErrorHandler restTemplateResponseErrorHandler() {
         return new RestTemplateResponseErrorHandler();
     }
 
     @Bean
-    public RestTemplate restTemplate(OffersFetcherRestTemplateConfigurationProperties properties) {
+    public RestTemplate restTemplate() {
         return new RestTemplateBuilder()
                 .errorHandler(restTemplateResponseErrorHandler())
                 .setConnectTimeout(Duration.ofMillis(properties.connectTimeout()))
@@ -30,7 +30,7 @@ public class OffersFetcherRestClientConfig {
     }
 
     @Bean
-    public OffersFetchable offersFetcherRemoteClient(RestTemplate restTemplate, OffersFetcherRestTemplateConfigurationProperties properties) {
-        return new OffersFetcherRestTemplate(restTemplate, properties.uri(), properties.port(), properties.service());
+    public OffersFetchable offersFetcherRemoteClient(RestTemplate restTemplate) {
+        return new OffersFetcherRestClient(restTemplate, properties.uri(), properties.port(), properties.service());
     }
 }

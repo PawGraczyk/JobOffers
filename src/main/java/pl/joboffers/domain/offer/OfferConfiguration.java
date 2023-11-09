@@ -26,7 +26,7 @@ public class OfferConfiguration {
 
             @Override
             public Offer save(Offer offer) {
-                return null;
+                return offer;
             }
         };
     }

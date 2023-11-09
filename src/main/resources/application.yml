@@ -6,11 +6,15 @@ spring:
     location: logo.txt
 
 joboffers:
-    http:
-      client:
-        config:
-          uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
-          port: 5057
-          service: /offers
-          connectTimeout: 1000
-          readTimeout: 1000
+  scheduler:
+    fetchOccurrence: "0 0 */3 * * * "
+  http:
+    client:
+      config:
+        uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
+        port: 5057
+        service: /offers
+        connectTimeout: 1000
+        readTimeout: 1000
+
+

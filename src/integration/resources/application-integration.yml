@@ -1,0 +1,3 @@
+joboffers:
+  scheduler:
+    fetchOccurrence: "*/1 * * * * *"

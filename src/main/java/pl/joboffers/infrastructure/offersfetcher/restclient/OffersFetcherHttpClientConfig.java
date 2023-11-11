@@ -12,12 +12,12 @@ import java.time.Duration;
 
 @Configuration
 @AllArgsConstructor
-public class OffersFetcherRestClientConfig {
+public class OffersFetcherHttpClientConfig {
 
-    private final OffersFetcherRestTemplateConfigurationProperties properties;
+    private final OffersFetcherHttpClientConfigurationProperties properties;
     @Bean
-    public RestTemplateResponseErrorHandler restTemplateResponseErrorHandler() {
-        return new RestTemplateResponseErrorHandler();
+    public HttpClientResponseErrorHandler restTemplateResponseErrorHandler() {
+        return new HttpClientResponseErrorHandler();
     }
 
     @Bean
@@ -31,6 +31,6 @@ public class OffersFetcherRestClientConfig {
 
     @Bean
     public OffersFetchable offersFetcherRemoteClient(RestTemplate restTemplate) {
-        return new OffersFetcherRestClient(restTemplate, properties.uri(), properties.port(), properties.service());
+        return new OffersFetcherHttpClient(restTemplate, properties.uri(), properties.port(), properties.service());
     }
 }

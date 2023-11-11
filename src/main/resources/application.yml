@@ -5,9 +5,10 @@ spring:
   banner:
     location: logo.txt
 
+
 joboffers:
   scheduler:
-    fetchOccurrence: "0 0 */3 * * * "
+    fetchOccurrence: PT3H
   http:
     client:
       config:
@@ -16,5 +17,8 @@ joboffers:
         service: /offers
         connectTimeout: 1000
         readTimeout: 1000
+
+scheduling:
+  enabled: true
 
 

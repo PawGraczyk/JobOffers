@@ -8,7 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
-public class RestTemplateResponseErrorHandler extends DefaultResponseErrorHandler {
+public class HttpClientResponseErrorHandler extends DefaultResponseErrorHandler {
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
         final HttpStatusCode statusCode = response.getStatusCode();

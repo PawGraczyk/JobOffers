@@ -7,9 +7,8 @@ import pl.joboffers.domain.offersfetcher.OffersFetcherFacade;
 import java.util.List;
 import java.util.Optional;
 
-
 @Configuration
-public class OfferConfiguration {
+public class OfferFacadeConfiguration {
 
     @Bean
     OfferRepository offerRepository() {
@@ -32,12 +31,8 @@ public class OfferConfiguration {
     }
 
     @Bean
-    OfferService offerService() {
-        return new OfferService(offerRepository());
-    }
-
-    @Bean
-    OfferFacade offerFacade(OfferRepository repository, OffersFetcherFacade fetcherFacade, OfferService service) {
-        return new OfferFacade(repository, fetcherFacade, service);
+    OfferFacade offerFacade(OfferRepository repository, OffersFetcherFacade fetcherFacade) {
+        final OfferService offerService = new OfferService(repository);
+        return new OfferFacade(repository, fetcherFacade, offerService);
     }
 }

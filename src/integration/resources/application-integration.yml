@@ -1,3 +1,6 @@
 joboffers:
   scheduler:
-    fetchOccurrence: "*/1 * * * * *"
+    fetchOccurrence: PT1S
+
+scheduling:
+  enabled: false

@@ -5,7 +5,7 @@ import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
 import java.util.ArrayList;
 import java.util.List;
 
-class OffersFetcherTestImplementation implements OfferFetchable {
+class OffersFetcherTestImplementation implements OffersFetchable {
 
     private final List<RemoteJobOfferDto> fetchedOffers;
 

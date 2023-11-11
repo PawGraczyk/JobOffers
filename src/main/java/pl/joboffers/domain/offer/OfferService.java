@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class OfferService {
+class OfferService {
 
     private final OfferRepository repository;
 

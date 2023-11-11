@@ -1,0 +1,6 @@
+joboffers:
+  scheduler:
+    fetchOccurrence: PT1S
+
+scheduling:
+  enabled: false

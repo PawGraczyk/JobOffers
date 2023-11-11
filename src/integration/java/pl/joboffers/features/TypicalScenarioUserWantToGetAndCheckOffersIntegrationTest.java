@@ -6,22 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.SampleHttpResponse;
-import pl.joboffers.domain.offersfetcher.OfferFetchable;
-import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
+import pl.joboffers.domain.offer.OfferFacade;
+import pl.joboffers.infrastructure.offer.scheduler.JobOffersScheduler;
 
-import java.util.List;
+
+import static org.awaitility.Awaitility.await;
 
 public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    OfferFetchable offersFetcher;
+    OfferFacade offerFacade;
     @Autowired
     SampleHttpResponse httpResponse;
+    @Autowired
+    JobOffersScheduler jobOffersScheduler;
 
     @Test
     public void user_has_to_be_authenticated_and_api_should_have_offers() {
         //# typical path: user want to see offers but have to be logged in and external server should have some offers
-        //step 0: external service returns job offers
+        //step 0: external service returns job offers (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
+        //step 1: there are no offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
@@ -29,19 +33,11 @@ public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends B
                         .withBody(httpResponse.responseWithFourObjects())
 
                 ));
-        List<RemoteJobOfferDto> remoteJobOffers = offersFetcher.fetchOffers();
-
-        // step 1: there are no offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
-        wireMockServer.stubFor(WireMock.get("/offers")
-                .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(httpResponse.emptyResponse())
-
-                ));
-        List<RemoteJobOfferDto> emptyList = offersFetcher.fetchOffers();
-
         // step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
+        jobOffersScheduler.fetchRemoteJobOffers();
+
+
+
         // step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
         // step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
         // step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)

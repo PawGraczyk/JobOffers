@@ -1,4 +1,4 @@
-package pl.joboffers.infrastructure.offersfetcher.httpclient;
+package pl.joboffers.infrastructure.offersfetcher.restclient;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -8,7 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
-public class RestTemplateResponseErrorHandler extends DefaultResponseErrorHandler {
+public class HttpClientResponseErrorHandler extends DefaultResponseErrorHandler {
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
         final HttpStatusCode statusCode = response.getStatusCode();

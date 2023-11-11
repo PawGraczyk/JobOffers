@@ -101,7 +101,7 @@ public class OfferFacadeTest {
         testData.put("TestUrl5", new Offer(null, "TestCompany5", "TestTitle5", "TestSalary5", "TestUrl5"));
         var offerFacadeForTest = new OfferFacadeTestConfiguration().getOfferFacadeForTest(testData);
         // when
-        List<OfferResponseDto> offerResponseDtos = offerFacadeForTest.fetchAllOffersAndSaveAllIfNotExists();
+        List<OfferResponseDto> offerResponseDtos = offerFacadeForTest.fetchRemoteOffersAndSaveIfNotExists();
         //then
         assertThat(offerResponseDtos).containsExactlyInAnyOrder(
                 new OfferResponseDto(null, "TestCompany6", "TestTitle6", "TestSalary6", "UniqueUrl1"),
@@ -119,7 +119,7 @@ public class OfferFacadeTest {
         testData.put("TestUrl3", new Offer(null, "TestCompany3", "TestTitle3", "TestSalary3", "TestUrl3"));
         var offerFacadeForTest = new OfferFacadeTestConfiguration().getOfferFacadeForTest(testData);
         // when
-        List<OfferResponseDto> offerResponseDtos = offerFacadeForTest.fetchAllOffersAndSaveAllIfNotExists();
+        List<OfferResponseDto> offerResponseDtos = offerFacadeForTest.fetchRemoteOffersAndSaveIfNotExists();
         //then
         assertThat(offerResponseDtos).containsExactlyInAnyOrder(
                 new OfferResponseDto(null, "TestCompany4", "TestTitle4", "TestSalary4", "TestUrl4"),

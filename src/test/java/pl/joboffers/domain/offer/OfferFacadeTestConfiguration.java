@@ -11,8 +11,7 @@ class OfferFacadeTestConfiguration {
 
     public OfferFacade getOfferFacadeForTest(Map<String, Offer> testData) {
         OfferRepository repository = new OfferRepositoryTestImplementation(testData);
-        OfferService offerService = new OfferService(repository);
         OffersFetcherFacade fetcherFacade = new OffersFetcherFacade(new OffersFetcherInOfferFacadeTestImplementation());
-        return new OfferFacade(repository, fetcherFacade, offerService);
+        return new OfferFacade(repository, fetcherFacade);
     }
 }

@@ -21,8 +21,7 @@ public class OfferFacadeTest {
             repository,
             new OffersFetcherFacade(
                     new OffersFetcherInOfferFacadeTestImplementation()
-            ),
-            new OfferService(repository)
+            )
     );
 
     @Test

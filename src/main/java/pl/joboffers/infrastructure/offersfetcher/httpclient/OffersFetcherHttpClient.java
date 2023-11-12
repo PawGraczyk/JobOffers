@@ -1,4 +1,4 @@
-package pl.joboffers.infrastructure.offersfetcher.restclient;
+package pl.joboffers.infrastructure.offersfetcher.httpclient;
 
 
 import lombok.AllArgsConstructor;
@@ -11,6 +11,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pl.joboffers.domain.offersfetcher.OffersFetchable;
 import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,7 +57,7 @@ public class OffersFetcherHttpClient implements OffersFetchable {
             log.info(logFetchInfo.FETCHED_EMPTY_BODY);
             return Collections.emptyList();
         }
-        log.info(logFetchInfo.FETCHED_SUCCESSFULLY);
+        log.info(logFetchInfo.FETCHED_SUCCESSFULLY.toString(), remoteJobOfferDtos.size());
         return remoteJobOfferDtos;
     }
 
@@ -73,7 +75,7 @@ public class OffersFetcherHttpClient implements OffersFetchable {
     private enum logFetchInfo {
         FETCH_STARTED("Fetching data started."),
         FETCHED_EMPTY_BODY("Response is empty. No data fetched."),
-        FETCHED_SUCCESSFULLY("Data fetched successfully."),
+        FETCHED_SUCCESSFULLY("Data fetched successfully. Fetched {} objects."),
         ERROR_WHILE_FETCHING("An error occurred while fetching!");
 
         private final String description;

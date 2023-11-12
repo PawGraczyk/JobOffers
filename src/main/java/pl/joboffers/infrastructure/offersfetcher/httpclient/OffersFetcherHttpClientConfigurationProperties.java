@@ -1,4 +1,4 @@
-package pl.joboffers.infrastructure.offersfetcher.restclient;
+package pl.joboffers.infrastructure.offersfetcher.httpclient;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

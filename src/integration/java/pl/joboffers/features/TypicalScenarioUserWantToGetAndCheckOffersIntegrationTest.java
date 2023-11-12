@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.SampleHttpResponse;
 import pl.joboffers.domain.offer.OfferFacade;
+import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.infrastructure.offer.scheduler.JobOffersScheduler;
 
+import java.util.List;
 
-import static org.awaitility.Awaitility.await;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends BaseIntegrationTest {
 
@@ -25,16 +27,20 @@ public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends B
     public void user_has_to_be_authenticated_and_api_should_have_offers() {
         //# typical path: user want to see offers but have to be logged in and external server should have some offers
         //step 0: external service returns job offers (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
-        //step 1: there are no offers in external HTTP server (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
+        //step 1: there are no offers in external HTTP server
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody(httpResponse.responseWithFourObjects())
+                        .withBody(httpResponse.emptyResponse())
 
                 ));
         // step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
-        jobOffersScheduler.fetchRemoteJobOffers();
+        // given & when
+        List <OfferResponseDto> addedOffers =  jobOffersScheduler.fetchRemoteJobOffers();
+        // then
+        assertThat(addedOffers).hasSize(0);
+
 
 
 

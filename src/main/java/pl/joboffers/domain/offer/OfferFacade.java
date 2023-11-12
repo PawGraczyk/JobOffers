@@ -17,7 +17,6 @@ public class OfferFacade {
     private final static String OFFER_NOT_FOUND_MESSAGE = "Offer not found";
     private final OfferRepository repository;
     private final OffersFetcherFacade fetcherFacade;
-    private final OfferService offerService;
 
     public List<OfferResponseDto> findAllOffers() {
         return repository.findAll()
@@ -34,13 +33,19 @@ public class OfferFacade {
     }
 
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
-        Offer offer = OfferMapper.mapFromOfferDtoToOffer(offerRequestDto);
-        Offer savedOffer = repository.save(offer);
-        return OfferMapper.mapFromOfferToOfferDto(savedOffer);
+        Offer offerDocument = OfferMapper.mapFromOfferDtoToOffer(offerRequestDto);
+        Offer save = repository.save(offerDocument);
+        return OfferMapper.mapFromOfferToOfferDto(save);
     }
 
     public List<OfferResponseDto> fetchRemoteOffersAndSaveIfNotExists() {
         List<RemoteJobOfferDto> fetchedRemoteJobOffers = fetcherFacade.fetchRemoteJobOffers();
-        return offerService.saveUniqueOffers(fetchedRemoteJobOffers);
+        return fetchedRemoteJobOffers.stream()
+                .filter(remoteJobOffer -> remoteJobOffer.offerUrl() != null)
+                .filter(remoteJobOffer -> !repository.existsByOfferUrl(remoteJobOffer.offerUrl()))
+                .map(OfferMapper::mapFromRemoteJobOfferToOffer)
+                .map(repository::save)
+                .map(OfferMapper::mapFromOfferToOfferDto)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

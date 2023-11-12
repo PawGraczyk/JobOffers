@@ -11,28 +11,7 @@ import java.util.Optional;
 public class OfferFacadeConfiguration {
 
     @Bean
-    OfferRepository offerRepository() {
-        return new OfferRepository() {
-            @Override
-            public List<Offer> findAll() {
-                return null;
-            }
-
-            @Override
-            public Optional<Offer> findById(String inputId) {
-                return Optional.empty();
-            }
-
-            @Override
-            public Offer save(Offer offer) {
-                return offer;
-            }
-        };
-    }
-
-    @Bean
     OfferFacade offerFacade(OfferRepository repository, OffersFetcherFacade fetcherFacade) {
-        final OfferService offerService = new OfferService(repository);
-        return new OfferFacade(repository, fetcherFacade, offerService);
+        return new OfferFacade(repository, fetcherFacade);
     }
 }

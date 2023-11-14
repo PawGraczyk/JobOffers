@@ -1,4 +1,7 @@
 spring:
+  docker:
+    compose:
+      file: docker-compose.yml
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/offers

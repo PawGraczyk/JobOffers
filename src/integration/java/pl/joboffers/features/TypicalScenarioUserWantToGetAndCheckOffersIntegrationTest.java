@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.SampleHttpResponse;
 import pl.joboffers.domain.offer.OfferFacade;
@@ -15,6 +17,7 @@ import pl.joboffers.infrastructure.offer.scheduler.JobOffersScheduler;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,21 +54,21 @@ public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends B
         // step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
         //given
         //when
-        ResultActions perform = mockMvc.perform(post("/token")
-                .content(
-                        """
-                                { 
-                                 "username": someUser
-                                 "password": somePassword    
-                                }
-                                    """
-                ).contentType(MediaType.APPLICATION_JSON)
-        );
-        //then
-        perform.andExpect(status().isUnauthorized());
+        ResultActions performTokenPost = mockMvc.perform(post("/token"));
+        //
 
 
         // step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
+        //given
+        //when
+        ResultActions performGetOffers = mockMvc.perform(get("/offers")
+
+        );
+        //then
+        performGetOffers.andExpect(status().isUnauthorized());
+
+
+
         // step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
         // step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jwttoken=AAAA.BBBB.CCC
         // step 7: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 0 offers

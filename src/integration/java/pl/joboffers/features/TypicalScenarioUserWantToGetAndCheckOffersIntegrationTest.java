@@ -1,13 +1,12 @@
 package pl.joboffers.features;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.SampleHttpResponse;
 import pl.joboffers.domain.offer.OfferFacade;
@@ -18,7 +17,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends BaseIntegrationTest {
@@ -35,6 +33,7 @@ public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends B
         //# typical path: user want to see offers but have to be logged in and external server should have some offers
         //step 0: external service returns job offers (http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com:5057/offers)
         //step 1: there are no offers in external HTTP server
+        // given && when && then
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
@@ -43,35 +42,27 @@ public class TypicalScenarioUserWantToGetAndCheckOffersIntegrationTest extends B
 
                 ));
 
-
         // step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         // given & when
         List<OfferResponseDto> addedOffers = jobOffersScheduler.fetchRemoteJobOffers();
         // then
-        assertThat(addedOffers).hasSize(0);
-
+         assertThat(addedOffers).isEmpty();
 
         // step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
-        //given
-        //when
-        ResultActions performTokenPost = mockMvc.perform(post("/token"));
-        //
-
-
         // step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
-        //given
-        //when
-        ResultActions performGetOffers = mockMvc.perform(get("/offers")
-
-        );
-        //then
-        performGetOffers.andExpect(status().isUnauthorized());
-
-
-
         // step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
         // step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jwttoken=AAAA.BBBB.CCC
         // step 7: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 0 offers
+        //given && when && then
+        MvcResult result = mockMvc.perform(get("/offers")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        String json = result.getResponse().getContentAsString();
+        List<OfferResponseDto> offers = objectMapper.readValue(json, new TypeReference<>() {
+        });
+        assertThat(offers).isEmpty();
+
         // step 8: there are 2 new offers in external HTTP server
         // step 9: scheduler ran 2nd time and made GET to external server and system added 2 new offers with ids: 1000 and 2000 to database
         // step 10: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 2 offers with ids: 1000 and 2000

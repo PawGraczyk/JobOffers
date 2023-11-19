@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Builder
 @Document
 record Offer(
-        @Id
+        @Id()
         String id,
         @Field("company")
         String company,

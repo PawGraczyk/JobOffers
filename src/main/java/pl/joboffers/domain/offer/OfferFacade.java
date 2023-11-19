@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OfferFacade {
 
-    private final static String OFFER_NOT_FOUND_MESSAGE = "Offer not found";
+    private final static String OFFER_NOT_FOUND_MESSAGE = "Offer not found for id: ";
     private final OfferRepository repository;
     private final OffersFetcherFacade fetcherFacade;
 
@@ -26,10 +26,10 @@ public class OfferFacade {
     }
 
     public OfferResponseDto findOfferById(FindByIdRequestDto requestDto) {
-        String requestString = requestDto.id();
-        return repository.findById(requestString)
+        String requestId = requestDto.id();
+        return repository.findById(requestId)
                 .map(OfferMapper::mapFromOfferToOfferDto)
-                .orElseThrow(() -> new OfferNotFoundException(OFFER_NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new OfferNotFoundException(OFFER_NOT_FOUND_MESSAGE + requestId));
     }
 
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {

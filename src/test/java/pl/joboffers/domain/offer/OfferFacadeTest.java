@@ -36,9 +36,7 @@ public class OfferFacadeTest {
     @Test
     public void should_throw_exception_when_offer_id_not_found() {
         // given
-        FindByIdRequestDto requestedId = FindByIdRequestDto.builder()
-                .id("12344UED")
-                .build();
+        FindByIdRequestDto requestedId = new FindByIdRequestDto("12344UED");
         //when
         //then
         assertThrows(OfferNotFoundException.class,

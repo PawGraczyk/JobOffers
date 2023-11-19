@@ -27,6 +27,7 @@
         <testcontainers.version>1.17.4</testcontainers.version>
         <wiremock.version>3.2.0</wiremock.version>
         <awaitility.version>4.2.0</awaitility.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.2.0</springdoc-openapi-starter-webmvc-ui.version>
     </properties>
 
     <dependencies>
@@ -113,6 +114,12 @@
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!-- SPRING DOC http://localhost:8080/swagger-ui/index.html -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
         </dependency>
     </dependencies>
     <build>

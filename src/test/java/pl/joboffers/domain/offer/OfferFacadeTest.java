@@ -1,6 +1,7 @@
 package pl.joboffers.domain.offer;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DuplicateKeyException;
 import pl.joboffers.domain.offer.dto.FindByIdRequestDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
@@ -82,9 +83,9 @@ public class OfferFacadeTest {
         // when
         testOfferFacadeWithoutPreConfig.saveOffer(offerRequestDto);
         //then
-        assertThrows(OfferUniqueConstraintViolationException.class,
+        assertThrows(DuplicateKeyException.class,
                 () -> testOfferFacadeWithoutPreConfig.saveOffer(offerRequestDto),
-                "Entity already exists in the database");
+                String.format("Offer with offerUrl %s already exists in the database", offerRequestDto.offerUrl()));
     }
 
     @Test

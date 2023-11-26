@@ -18,7 +18,7 @@ record Offer(
         @Field("salary")
         String salary,
         @Field("url")
-        @Indexed(unique = true)
+        @Indexed(name = "offer_url_idx", unique = true)
         String offerUrl
 ) {
 }

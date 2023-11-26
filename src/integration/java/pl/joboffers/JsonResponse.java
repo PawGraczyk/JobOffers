@@ -11,6 +11,12 @@ public class JsonResponse implements SampleHttpResponse {
     }
 
     @Override
+    public String responseWithOneObject() {
+        return """
+                {"title":"Junior Java Developer","company":"BlueSoft Sp. z o.o.","salary":"7 000 – 9 000 PLN","offerUrl":"https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"}""".trim();
+    }
+
+    @Override
     public String responseWithTwoObjects() {
         return """
                 [{"title":"Junior Java Developer","company":"BlueSoft Sp. z o.o.","salary":"7 000 – 9 000 PLN","offerUrl":"https://nofluffjobs.com/pl/job/junior-java-developer-bluesoft-remote-hfuanrre"},

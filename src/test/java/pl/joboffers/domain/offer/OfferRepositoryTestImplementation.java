@@ -1,5 +1,8 @@
 package pl.joboffers.domain.offer;
 
+import com.mongodb.MongoWriteException;
+import com.mongodb.WriteError;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +33,7 @@ public class OfferRepositoryTestImplementation implements OfferRepository {
     public <S extends Offer> S save(S entity) {
         boolean offerAlreadyExists = inMemoryOfferDatabase.values().stream().anyMatch(offerInDatabase -> offerInDatabase.offerUrl().equals(entity.offerUrl()));
         if (offerAlreadyExists) {
-            throw new OfferUniqueConstraintViolationException("Entity already exists in the database");
+            throw new DuplicateKeyException(String.format("Offer with offerUrl %s already exists in the database", entity.offerUrl()));
         }
         inMemoryOfferDatabase.put(entity.offerUrl(), entity);
         return entity;

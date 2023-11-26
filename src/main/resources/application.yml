@@ -5,6 +5,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/offers
+      auto-index-creation: true
   banner:
     location: logo.txt
 

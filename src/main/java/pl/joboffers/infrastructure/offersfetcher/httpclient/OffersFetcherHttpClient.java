@@ -7,6 +7,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.joboffers.domain.offersfetcher.OffersFetchable;
 import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
@@ -37,9 +38,9 @@ public class OffersFetcherHttpClient implements OffersFetchable {
                 .toUriString();
         try {
             return makeRequest(url, requestEntity);
-        } catch (ResourceAccessException e) {
+        } catch (ResourceAccessException | IllegalArgumentException e) {
             log.error(logFetchInfo.ERROR_WHILE_FETCHING);
-            return Collections.emptyList();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -53,7 +54,10 @@ public class OffersFetcherHttpClient implements OffersFetchable {
                 });
 
         remoteJobOfferDtos = response.getBody();
-        if (remoteJobOfferDtos != null && remoteJobOfferDtos.isEmpty()) {
+        if (remoteJobOfferDtos == null) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+        if (remoteJobOfferDtos.isEmpty()) {
             log.info(logFetchInfo.FETCHED_EMPTY_BODY);
             return Collections.emptyList();
         }

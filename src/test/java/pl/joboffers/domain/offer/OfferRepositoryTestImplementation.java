@@ -31,11 +31,11 @@ public class OfferRepositoryTestImplementation implements OfferRepository {
 
     @Override
     public <S extends Offer> S save(S entity) {
-        boolean offerAlreadyExists = inMemoryOfferDatabase.values().stream().anyMatch(offerInDatabase -> offerInDatabase.offerUrl().equals(entity.offerUrl()));
+        boolean offerAlreadyExists = inMemoryOfferDatabase.values().stream().anyMatch(offerInDatabase -> offerInDatabase.getOfferUrl().equals(entity.getOfferUrl()));
         if (offerAlreadyExists) {
-            throw new DuplicateKeyException(String.format("Offer with offerUrl %s already exists in the database", entity.offerUrl()));
+            throw new DuplicateKeyException(String.format("Offer with offerUrl %s already exists in the database", entity.getOfferUrl()));
         }
-        inMemoryOfferDatabase.put(entity.offerUrl(), entity);
+        inMemoryOfferDatabase.put(entity.getOfferUrl(), entity);
         return entity;
     }
 
@@ -45,7 +45,7 @@ public class OfferRepositoryTestImplementation implements OfferRepository {
     }
 
     @Override
-    public Optional<Offer> findById(String id) {
+    public Optional<Offer> findById(Long id) {
         return Optional.ofNullable(inMemoryOfferDatabase.get(id));
     }
 
@@ -60,7 +60,7 @@ public class OfferRepositoryTestImplementation implements OfferRepository {
     }
 
     @Override
-    public List<Offer> findAllById(Iterable<String> strings) {
+    public List<Offer> findAllById(Iterable<Long> strings) {
         return null;
     }
 
@@ -70,7 +70,7 @@ public class OfferRepositoryTestImplementation implements OfferRepository {
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(Long s) {
 
     }
 
@@ -80,7 +80,7 @@ public class OfferRepositoryTestImplementation implements OfferRepository {
     }
 
     @Override
-    public void deleteAllById(Iterable<? extends String> strings) {
+    public void deleteAllById(Iterable<? extends Long> strings) {
 
     }
 
@@ -95,7 +95,7 @@ public class OfferRepositoryTestImplementation implements OfferRepository {
     }
 
     @Override
-    public boolean existsById(String s) {
+    public boolean existsById(Long s) {
         return false;
     }
 

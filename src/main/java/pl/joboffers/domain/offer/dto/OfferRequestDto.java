@@ -3,6 +3,7 @@ package pl.joboffers.domain.offer.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
 public record OfferRequestDto(
@@ -17,7 +18,8 @@ public record OfferRequestDto(
         String salary,
         @NotEmpty(message = "{url.not.empty}")
         @NotNull(message = "{url.not.null}")
-        String offerUrl
-) {
+        String offerUrl) {
+
+
 }
 

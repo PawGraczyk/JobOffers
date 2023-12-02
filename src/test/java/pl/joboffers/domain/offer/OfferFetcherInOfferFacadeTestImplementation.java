@@ -5,7 +5,7 @@ import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
 
 import java.util.List;
 
-class OffersFetcherInOfferFacadeTestImplementation implements OffersFetchable {
+class OfferFetcherInOfferFacadeTestImplementation implements OffersFetchable {
 
     private final List<RemoteJobOfferDto> fetchedOffers = List.of(
             new RemoteJobOfferDto("TestCompany1", "TestTitle1", "TestSalary1", "TestUrl1"),

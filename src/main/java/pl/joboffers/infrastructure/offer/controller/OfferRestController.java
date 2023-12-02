@@ -30,7 +30,7 @@ public class OfferRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OfferResponseDto> offers(@PathVariable String id){
+    public ResponseEntity<OfferResponseDto> offers(@PathVariable Long id){
         FindByIdRequestDto requestDto = new FindByIdRequestDto(id);
         OfferResponseDto offer = facade.findOfferById(requestDto);
         return ResponseEntity.ok(offer);

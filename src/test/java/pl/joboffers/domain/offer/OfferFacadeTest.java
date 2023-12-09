@@ -6,7 +6,6 @@ import pl.joboffers.domain.offer.dto.FindByIdRequestDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

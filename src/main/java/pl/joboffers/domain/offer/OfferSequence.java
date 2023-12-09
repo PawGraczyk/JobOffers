@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 record OfferSequence(
         @Id
         String id,
-        long seq_offer) {
+        long sequenceCurVal) {
 }
 

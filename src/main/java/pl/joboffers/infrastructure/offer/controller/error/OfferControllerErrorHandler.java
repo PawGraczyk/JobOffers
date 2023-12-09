@@ -1,7 +1,6 @@
 package pl.joboffers.infrastructure.offer.controller.error;
 
 
-import com.mongodb.MongoWriteException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -10,8 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import pl.joboffers.domain.offer.OfferNotFoundException;
+import pl.joboffers.infrastructure.offer.controller.OfferRestController;
 
-@ControllerAdvice
+@ControllerAdvice(basePackageClasses = OfferRestController.class)
 @Log4j2
 public class OfferControllerErrorHandler {
 

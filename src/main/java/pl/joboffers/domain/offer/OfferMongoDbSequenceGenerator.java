@@ -16,7 +16,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Service
 class OfferMongoDbSequenceGenerator implements OfferSequenceGenerator {
 
-    private final static String SEQUENCE_FIELD_NAME = "seq_offer";
+    private final static String SEQUENCE_FIELD_NAME = "sequenceCurVal";
     private final MongoOperations mongoOperations;
 
     @Override
@@ -27,7 +27,7 @@ class OfferMongoDbSequenceGenerator implements OfferSequenceGenerator {
                         new Update().inc(SEQUENCE_FIELD_NAME, 1),
                         options().returnNew(true).upsert(true),
                         OfferSequence.class);
-        return !Objects.isNull(counter) ? counter.seq_offer() : 1L;
+        return !Objects.isNull(counter) ? counter.sequenceCurVal() : 1L;
     }
 
 }

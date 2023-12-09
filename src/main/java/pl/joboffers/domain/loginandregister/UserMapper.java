@@ -1,6 +1,6 @@
 package pl.joboffers.domain.loginandregister;
 
-import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
 
 class UserMapper {
@@ -13,10 +13,10 @@ class UserMapper {
                 .build();
     }
 
-    public static User mapFromRegistrationUserDtoToUser(RegistrationUserDto registrationUserDto) {
+    public static User mapFromRegistrationUserDtoToUser(RegistrationDto registrationDto) {
         return User.builder()
-                .username(registrationUserDto.username())
-                .password(registrationUserDto.password())
+                .username(registrationDto.username())
+                .password(registrationDto.password())
                 .build();
     }
 }

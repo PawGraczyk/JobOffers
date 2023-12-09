@@ -1,14 +1,15 @@
 package pl.joboffers.domain.loginandregister;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.BadCredentialsException;
 import pl.joboffers.domain.loginandregister.dto.FindByUsernameRequestDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
-import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class LoginAndRegisterFacadeTest {
@@ -19,11 +20,11 @@ class LoginAndRegisterFacadeTest {
     @Test
     public void should_return_user_by_given_username() {
         //given
-        RegistrationUserDto registrationUser = RegistrationUserDto.builder()
+        RegistrationDto registrationUser = RegistrationDto.builder()
                 .username("Username")
                 .password("qwerty")
                 .build();
-        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerNewUser(registrationUser);
+        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.register(registrationUser);
         FindByUsernameRequestDto requestDto = FindByUsernameRequestDto.builder()
                 .username(registrationResultDto.username())
                 .build();
@@ -44,21 +45,23 @@ class LoginAndRegisterFacadeTest {
                 .username("NotExistingUser")
                 .build();
         //when
+        Throwable throwable = catchThrowable(() -> loginAndRegisterFacade.findUserByUsername(requestDto));
         //then
-        assertThrows(UserNotFoundException.class,
-                () -> loginAndRegisterFacade.findUserByUsername(requestDto),
-                "User not found.");
+        assertAll(
+                () -> assertThat(throwable).isInstanceOf(BadCredentialsException.class),
+                () -> assertThat(throwable.getMessage()).isEqualTo("User not found.")
+        );
     }
 
     @Test
     public void should_return_successful_result_when_registering_new_user() {
         //given
-        RegistrationUserDto registrationUser = RegistrationUserDto.builder()
+        RegistrationDto registrationUser = RegistrationDto.builder()
                 .username("Username")
                 .password("qwerty")
                 .build();
         //when
-        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.registerNewUser(registrationUser);
+        RegistrationResultDto registrationResultDto = loginAndRegisterFacade.register(registrationUser);
         //then
         assertAll(
                 () -> assertThat(registrationResultDto.username()).isEqualTo(registrationUser.username()),
@@ -69,16 +72,16 @@ class LoginAndRegisterFacadeTest {
     @Test
     public void should_return_negative_result_when_registering_existing_username() {
         //given
-        RegistrationUserDto registrationUserDto = RegistrationUserDto.builder()
+        RegistrationDto registrationDto = RegistrationDto.builder()
                 .username("Username")
                 .password("qwerty")
                 .build();
-        loginAndRegisterFacade.registerNewUser(registrationUserDto);
+        loginAndRegisterFacade.register(registrationDto);
         //when
-        RegistrationResultDto secondRegistration = loginAndRegisterFacade.registerNewUser(registrationUserDto);
+        RegistrationResultDto secondRegistration = loginAndRegisterFacade.register(registrationDto);
         //then
         assertAll(
-                () -> assertThat(secondRegistration.username()).isEqualTo(registrationUserDto.username()),
+                () -> assertThat(secondRegistration.username()).isEqualTo(registrationDto.username()),
                 () -> assertThat(secondRegistration.isRegistered()).isEqualTo(false));
 
     }

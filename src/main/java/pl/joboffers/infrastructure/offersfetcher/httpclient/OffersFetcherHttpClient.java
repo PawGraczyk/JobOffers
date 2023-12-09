@@ -12,8 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pl.joboffers.domain.offersfetcher.OffersFetchable;
 import pl.joboffers.domain.offersfetcher.dto.RemoteJobOfferDto;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

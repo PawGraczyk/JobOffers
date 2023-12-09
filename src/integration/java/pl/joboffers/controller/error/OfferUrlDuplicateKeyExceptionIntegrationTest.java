@@ -2,6 +2,7 @@ package pl.joboffers.controller.error;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.joboffers.BaseIntegrationTest;
 
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class OfferUrlDuplicateKeyExceptionIntegrationTest extends BaseIntegrationTest {
 
     @Test
+    @WithMockUser
     public void should_return_409_conflict_when_added_offer_with_duplicate_offer_url() throws Exception {
 
         // step 1

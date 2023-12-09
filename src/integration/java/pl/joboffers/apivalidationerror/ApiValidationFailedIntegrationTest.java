@@ -2,6 +2,7 @@ package pl.joboffers.apivalidationerror;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.joboffers.BaseIntegrationTest;
@@ -14,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
 
     @Test
+    @WithMockUser
     public void should_return_400_and_validation_message_when_request_does_have_empty_required_field() throws Exception {
         //given
         //when
@@ -42,6 +44,7 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void should_return_400_and_validation_message_when_request_is_empty() throws Exception {
         //given
         //when

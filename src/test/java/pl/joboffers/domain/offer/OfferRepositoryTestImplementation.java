@@ -1,7 +1,5 @@
 package pl.joboffers.domain.offer;
 
-import com.mongodb.MongoWriteException;
-import com.mongodb.WriteError;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

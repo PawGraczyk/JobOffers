@@ -1,6 +1,7 @@
 package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import pl.joboffers.domain.offer.dto.FindByIdRequestDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
@@ -19,6 +20,7 @@ public class OfferFacade {
     private final OffersFetcherFacade fetcherFacade;
     private final OfferSequenceGenerator sequenceGenerator;
 
+    @Cacheable("jobOffers")
     public List<OfferResponseDto> findAllOffers() {
         return repository.findAll()
                 .stream()

@@ -1,4 +1,8 @@
 spring:
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT10S
   docker:
     compose:
       file: docker-compose.yml
@@ -6,9 +10,11 @@ spring:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/offers
       auto-index-creation: true
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   banner:
     location: logo.txt
-
 
 joboffers:
   scheduler:
@@ -23,10 +29,10 @@ joboffers:
         readTimeout: 1000
 
 scheduling:
-  enabled: true
+   enabled: true
 
 auth:
-  .jwt:
+  jwt:
     secret: ${JWT_SECRET}
     expirationDays: 30
     issuer: Job Offers

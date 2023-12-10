@@ -1,5 +1,6 @@
 package pl.joboffers.domain.loginandregister;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +16,6 @@ import java.util.function.Function;
 
 public class UserRepositoryTestImplementation implements UserRepository {
 
-    private final static String USER_ALREADY_EXISTS_MESSAGE = "User already exists";
-
     private final Map<String, User> inMemoryUserDatabase = new ConcurrentHashMap<>();
 
     @Override
@@ -26,12 +25,12 @@ public class UserRepositoryTestImplementation implements UserRepository {
 
     @Override
     public <S extends User> S save(S entity) {
-        if (inMemoryUserDatabase.containsKey(entity.username())) {
-            throw new UserAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
-        } else {
-            inMemoryUserDatabase.put(entity.username(), entity);
-            return entity;
+        boolean userAlreadyExists = inMemoryUserDatabase.values().stream().anyMatch(userInDatabase -> userInDatabase.username().equals(entity.username()));
+        if (userAlreadyExists) {
+            throw new DuplicateKeyException(String.format("User with givenUsername %s already exists in the database", entity.username()));
         }
+        inMemoryUserDatabase.put(entity.username(), entity);
+        return entity;
     }
 
     @Override

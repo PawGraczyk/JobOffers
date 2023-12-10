@@ -2,6 +2,7 @@ package pl.joboffers.domain.offer;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -14,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 class Offer {
     @Transient
     public static final String SEQUENCE_NAME = "offers_database_sequence";
+    @Setter
     @Id
     private Long id;
     @Field("company")
@@ -26,7 +28,4 @@ class Offer {
     @Indexed(name = "offer_url_idx", unique = true)
     private String offerUrl;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

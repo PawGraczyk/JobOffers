@@ -32,8 +32,7 @@ public class OffersFetcherHttpClient implements OffersFetchable {
         String urlForService = getUrlForService();
         HttpHeaders httpHeaders = prepareHeaders();
         final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(httpHeaders);
-        final String url = UriComponentsBuilder.fromHttpUrl(urlForService)
-                .toUriString();
+        final String url = UriComponentsBuilder.fromHttpUrl(urlForService).toUriString();
         try {
             return makeRequest(url, requestEntity);
         } catch (ResourceAccessException | IllegalArgumentException e) {
@@ -44,12 +43,8 @@ public class OffersFetcherHttpClient implements OffersFetchable {
 
     private List<RemoteJobOfferDto> makeRequest(String url, HttpEntity<HttpHeaders> requestEntity) {
         List<RemoteJobOfferDto> remoteJobOfferDtos;
-        ResponseEntity<List<RemoteJobOfferDto>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                requestEntity,
-                new ParameterizedTypeReference<>() {
-                });
+        ResponseEntity<List<RemoteJobOfferDto>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<>() {
+        });
 
         remoteJobOfferDtos = response.getBody();
         if (remoteJobOfferDtos == null) {
@@ -75,10 +70,7 @@ public class OffersFetcherHttpClient implements OffersFetchable {
     }
 
     private enum logFetchInfo {
-        FETCH_STARTED("Fetching data started."),
-        FETCHED_EMPTY_BODY("Response is empty. No data fetched."),
-        FETCHED_SUCCESSFULLY("Data fetched successfully. Fetched {} objects."),
-        ERROR_WHILE_FETCHING("An error occurred while fetching!");
+        FETCH_STARTED("Fetching data started."), FETCHED_EMPTY_BODY("Response is empty. No data fetched."), FETCHED_SUCCESSFULLY("Data fetched successfully. Fetched {} objects."), ERROR_WHILE_FETCHING("An error occurred while fetching!");
 
         private final String description;
 

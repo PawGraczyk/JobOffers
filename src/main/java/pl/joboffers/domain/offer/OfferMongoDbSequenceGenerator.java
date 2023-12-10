@@ -21,12 +21,7 @@ class OfferMongoDbSequenceGenerator implements OfferSequenceGenerator {
 
     @Override
     public Long generateSequence(String sequenceName) {
-        OfferSequence counter = mongoOperations
-                .findAndModify(query(where("_id")
-                                .is(sequenceName)),
-                        new Update().inc(SEQUENCE_FIELD_NAME, 1),
-                        options().returnNew(true).upsert(true),
-                        OfferSequence.class);
+        OfferSequence counter = mongoOperations.findAndModify(query(where("_id").is(sequenceName)), new Update().inc(SEQUENCE_FIELD_NAME, 1), options().returnNew(true).upsert(true), OfferSequence.class);
         return !Objects.isNull(counter) ? counter.sequenceCurVal() : 1L;
     }
 

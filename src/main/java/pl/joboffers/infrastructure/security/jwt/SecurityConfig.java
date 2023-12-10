@@ -42,13 +42,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/swagger-ui/**", "/v3/api-docs", "/webjars/**", "/token/**", "/register/**", "/swagger-resources/**", "/offers")
-                .authorizeHttpRequests(
-                        requests -> requests
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs", "/webjars/**", "/token/**", "/register/**", "/swagger-resources/**").permitAll()
-                                .anyRequest().authenticated())
+        return http.csrf(AbstractHttpConfigurer::disable).securityMatcher("/swagger-ui/**", "/v3/api-docs", "/webjars/**", "/token/**", "/register/**", "/swagger-resources/**", "/offers")
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs", "/webjars/**", "/token/**", "/register/**", "/swagger-resources/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();

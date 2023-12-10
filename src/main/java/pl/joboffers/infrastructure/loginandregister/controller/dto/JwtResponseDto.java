@@ -1,7 +1,4 @@
 package pl.joboffers.infrastructure.loginandregister.controller.dto;
 
-public record JwtResponseDto(
-        String username,
-        String token
-) {
+public record JwtResponseDto(String username, String token) {
 }

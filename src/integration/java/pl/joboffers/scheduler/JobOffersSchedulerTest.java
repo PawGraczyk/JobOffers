@@ -21,9 +21,7 @@ public class JobOffersSchedulerTest extends BaseIntegrationTest {
 
     @Test
     public void should_run_rest_client_offers_fetching_exactly_given_times() {
-        await()
-                .atMost(Duration.ofSeconds(3))
-                .untilAsserted(() -> verify(remoteOfferClient, times(3)).fetchOffers());
+        await().atMost(Duration.ofSeconds(3)).untilAsserted(() -> verify(remoteOfferClient, times(3)).fetchOffers());
     }
 
 }

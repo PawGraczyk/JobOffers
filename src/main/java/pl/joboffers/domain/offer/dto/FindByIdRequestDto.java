@@ -1,6 +1,10 @@
 package pl.joboffers.domain.offer.dto;
 
-public record FindByIdRequestDto(
-        Long id
-) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public class FindByIdRequestDto {
+    private Long id;
 }

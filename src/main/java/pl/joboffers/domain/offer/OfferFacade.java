@@ -22,17 +22,12 @@ public class OfferFacade {
 
     @Cacheable("jobOffers")
     public List<OfferResponseDto> findAllOffers() {
-        return repository.findAll()
-                .stream()
-                .map(OfferMapper::mapFromOfferToOfferDto)
-                .collect(Collectors.toCollection(ArrayList::new));
+        return repository.findAll().stream().map(OfferMapper::mapFromOfferToOfferDto).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public OfferResponseDto findOfferById(FindByIdRequestDto requestDto) {
-        Long requestId = requestDto.id();
-        return repository.findById(requestId)
-                .map(OfferMapper::mapFromOfferToOfferDto)
-                .orElseThrow(() -> new OfferNotFoundException(OFFER_NOT_FOUND_MESSAGE + requestId));
+        Long requestId = requestDto.getId();
+        return repository.findById(requestId).map(OfferMapper::mapFromOfferToOfferDto).orElseThrow(() -> new OfferNotFoundException(OFFER_NOT_FOUND_MESSAGE + requestId));
     }
 
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
@@ -48,12 +43,8 @@ public class OfferFacade {
         return fetchedRemoteJobOffers.stream()
                 .filter(remoteJobOffer -> remoteJobOffer.offerUrl() != null)
                 .filter(remoteJobOffer -> !repository.existsByOfferUrl(remoteJobOffer.offerUrl()))
-                .map(remoteJobOffer ->
-                        OfferMapper.mapFromRemoteJobOfferToOffer(remoteJobOffer,
-                                sequenceGenerator.generateSequence(Offer.SEQUENCE_NAME))
-                )
-                .map(repository::save)
-                .map(OfferMapper::mapFromOfferToOfferDto)
+                .map(remoteJobOffer -> OfferMapper.mapFromRemoteJobOfferToOffer(remoteJobOffer, sequenceGenerator.generateSequence(Offer.SEQUENCE_NAME)))
+                .map(repository::save).map(OfferMapper::mapFromOfferToOfferDto)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 }

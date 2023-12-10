@@ -10,13 +10,7 @@ public class OffersFetcherHttpClientIntegrationTestConfig extends OffersFetcherH
     public OffersFetchable offersFetcherHttpClient(int port, int connectionTimeout, int readTimeout) {
         final String uri = "http://localhost";
         final String service = "/offers";
-        var properties = OffersFetcherHttpClientConfigurationProperties.builder()
-                .connectTimeout(connectionTimeout)
-                .readTimeout(readTimeout)
-                .uri(uri)
-                .service(service)
-                .port(port)
-                .build();
+        var properties = OffersFetcherHttpClientConfigurationProperties.builder().connectTimeout(connectionTimeout).readTimeout(readTimeout).uri(uri).service(service).port(port).build();
         RestTemplate restTemplate = restTemplate(properties);
         return offersFetcherHttpClient(restTemplate, properties);
 

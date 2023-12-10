@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.joboffers.domain.loginandregister.LoginAndRegisterFacade;
-import pl.joboffers.domain.loginandregister.dto.RegistrationDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationResultDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 
 @AllArgsConstructor
 @RestController
@@ -21,9 +21,9 @@ public class RegisterRestController {
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<RegistrationResultDto> register(@RequestBody RegistrationDto registration) {
-        String encodedPassword = bCryptPasswordEncoder.encode(registration.password());
-        RegistrationResultDto registrationResult = loginAndRegisterFacade.register(new RegistrationDto(registration.username(), encodedPassword));
+    public ResponseEntity<RegistrationResultDto> register(@RequestBody RegistrationUserDto registration) {
+        String encodedPassword = bCryptPasswordEncoder.encode(registration.getPassword());
+        RegistrationResultDto registrationResult = loginAndRegisterFacade.register(new RegistrationUserDto(registration.getUsername(), encodedPassword));
         return ResponseEntity.status(HttpStatus.CREATED).body(registrationResult);
     }
 }

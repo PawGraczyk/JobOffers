@@ -51,29 +51,23 @@ public class RedisOffersCacheIntegrationTest extends BaseIntegrationTest {
     public void should_save_offers_to_cache_and_then_invalidate_it_by_time_to_live() throws Exception {
         // step 1: someUser was registered with somePassword
         // given & when
-        ResultActions registerAction = mockMvc.perform(post("/register")
-                .content("""
-                        {
-                        "username": "someUser",
-                        "password": "somePassword"
-                        }
-                        """.trim())
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-        );
+        ResultActions registerAction = mockMvc.perform(post("/register").content("""
+                {
+                "username": "someUser",
+                "password": "somePassword"
+                }
+                """.trim()).contentType(MediaType.APPLICATION_JSON_VALUE));
         // then
         registerAction.andExpect(status().isCreated());
 
         // step 2: login
         // given && when
-        ResultActions successLoginRequest = mockMvc.perform(post("/token")
-                .content("""
-                        {
-                        "username": "someUser",
-                        "password": "somePassword"
-                        }
-                        """.trim())
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-        );
+        ResultActions successLoginRequest = mockMvc.perform(post("/token").content("""
+                {
+                "username": "someUser",
+                "password": "somePassword"
+                }
+                """.trim()).contentType(MediaType.APPLICATION_JSON_VALUE));
         // then
         MvcResult mvcResult = successLoginRequest.andExpect(status().isOk()).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
@@ -82,26 +76,16 @@ public class RedisOffersCacheIntegrationTest extends BaseIntegrationTest {
 
         // step 3: should save to cache offers request
         // given && when
-        mockMvc.perform(get("/offers")
-                .header("Authorization", "Bearer " + jwtToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-        );
+        mockMvc.perform(get("/offers").header("Authorization", "Bearer " + jwtToken).contentType(MediaType.APPLICATION_JSON_VALUE));
         // then
         verify(offerFacade, times(1)).findAllOffers();
         assertThat(cacheManager.getCacheNames().contains("jobOffers")).isTrue();
 
         // step 4: cache should be invalidated
         // given && when && then
-        await()
-                .atMost(Duration.ofSeconds(4))
-                .pollInterval(Duration.ofSeconds(1))
-                .untilAsserted(() -> {
-                            mockMvc.perform(get("/offers")
-                                    .header("Authorization", "Bearer " + jwtToken)
-                                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                            );
-                            verify(offerFacade, atLeast(2)).findAllOffers();
-                        }
-                );
+        await().atMost(Duration.ofSeconds(4)).pollInterval(Duration.ofSeconds(1)).untilAsserted(() -> {
+            mockMvc.perform(get("/offers").header("Authorization", "Bearer " + jwtToken).contentType(MediaType.APPLICATION_JSON_VALUE));
+            verify(offerFacade, atLeast(2)).findAllOffers();
+        });
     }
 }

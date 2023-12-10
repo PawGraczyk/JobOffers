@@ -25,11 +25,11 @@ public class UserRepositoryTestImplementation implements UserRepository {
 
     @Override
     public <S extends User> S save(S entity) {
-        boolean userAlreadyExists = inMemoryUserDatabase.values().stream().anyMatch(userInDatabase -> userInDatabase.username().equals(entity.username()));
+        boolean userAlreadyExists = inMemoryUserDatabase.values().stream().anyMatch(userInDatabase -> userInDatabase.getUsername().equals(entity.getUsername()));
         if (userAlreadyExists) {
-            throw new DuplicateKeyException(String.format("User with givenUsername %s already exists in the database", entity.username()));
+            throw new DuplicateKeyException(String.format("User with givenUsername %s already exists in the database", entity.getUsername()));
         }
-        inMemoryUserDatabase.put(entity.username(), entity);
+        inMemoryUserDatabase.put(entity.getUsername(), entity);
         return entity;
     }
 

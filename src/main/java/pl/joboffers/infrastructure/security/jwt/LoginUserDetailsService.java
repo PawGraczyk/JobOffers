@@ -22,10 +22,7 @@ public class LoginUserDetailsService implements UserDetailsService {
         return getUser(userDto);
     }
 
-    private org.springframework.security.core.userdetails.User getUser(UserDto user) {
-        return new org.springframework.security.core.userdetails.User(
-                user.username(),
-                user.password(),
-                Collections.emptyList());
+    private org.springframework.security.core.userdetails.User getUser(UserDto userDto) {
+        return new org.springframework.security.core.userdetails.User(userDto.getUsername(), userDto.getPassword(), Collections.emptyList());
     }
 }

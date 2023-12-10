@@ -20,11 +20,7 @@ public class OffersFetcherHttpClientConfig {
 
     @Bean
     public RestTemplate restTemplate(OffersFetcherHttpClientConfigurationProperties properties) {
-        return new RestTemplateBuilder()
-                .errorHandler(restTemplateResponseErrorHandler())
-                .setConnectTimeout(Duration.ofMillis(properties.connectTimeout()))
-                .setReadTimeout(Duration.ofMillis(properties.readTimeout()))
-                .build();
+        return new RestTemplateBuilder().errorHandler(restTemplateResponseErrorHandler()).setConnectTimeout(Duration.ofMillis(properties.connectTimeout())).setReadTimeout(Duration.ofMillis(properties.readTimeout())).build();
     }
 
     @Bean

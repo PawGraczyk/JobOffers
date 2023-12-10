@@ -25,8 +25,7 @@ public class JwtAuthenticatorFacade {
     private final JwtConfigurationProperties properties;
 
     public JwtResponseDto authenticateAndGenerateToken(TokenRequestDto tokenRequest) {
-        Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(tokenRequest.username(), tokenRequest.password()));
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(tokenRequest.username(), tokenRequest.password()));
         User user = (User) authenticate.getPrincipal();
 
         String username = user.getUsername();
@@ -41,11 +40,6 @@ public class JwtAuthenticatorFacade {
         Instant now = LocalDateTime.now(clock).toInstant(ZoneOffset.UTC);
         Instant expiresAt = now.plus(Duration.ofDays(properties.expirationDays()));
         final String issuer = properties.issuer();
-        return JWT.create()
-                .withSubject(user.getUsername())
-                .withIssuedAt(now)
-                .withExpiresAt(expiresAt)
-                .withIssuer(issuer)
-                .sign(algorithm);
+        return JWT.create().withSubject(user.getUsername()).withIssuedAt(now).withExpiresAt(expiresAt).withIssuer(issuer).sign(algorithm);
     }
 }

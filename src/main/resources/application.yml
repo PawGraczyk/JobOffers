@@ -29,7 +29,7 @@ joboffers:
         readTimeout: 1000
 
 scheduling:
-   enabled: true
+  enabled: true
 
 auth:
   jwt:

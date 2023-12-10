@@ -1,6 +1,7 @@
 package pl.joboffers.domain.loginandregister;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.BadCredentialsException;
 import pl.joboffers.domain.loginandregister.dto.FindByUsernameRequestDto;
 import pl.joboffers.domain.loginandregister.dto.RegistrationDto;
@@ -26,7 +27,7 @@ class LoginAndRegisterFacadeTest {
                 .build();
         RegistrationResultDto registrationResultDto = loginAndRegisterFacade.register(registrationUser);
         FindByUsernameRequestDto requestDto = FindByUsernameRequestDto.builder()
-                .username(registrationResultDto.username())
+                .username(registrationResultDto.getUsername())
                 .build();
         //when
         UserDto result = loginAndRegisterFacade.findUserByUsername(requestDto);
@@ -64,13 +65,13 @@ class LoginAndRegisterFacadeTest {
         RegistrationResultDto registrationResultDto = loginAndRegisterFacade.register(registrationUser);
         //then
         assertAll(
-                () -> assertThat(registrationResultDto.username()).isEqualTo(registrationUser.username()),
+                () -> assertThat(registrationResultDto.getUsername()).isEqualTo(registrationUser.username()),
                 () -> assertThat(registrationResultDto.isRegistered()).isEqualTo(true)
         );
     }
 
     @Test
-    public void should_return_negative_result_when_registering_existing_username() {
+    public void should_throw_DuplicateKeyException_when_registering_existing_username() {
         //given
         RegistrationDto registrationDto = RegistrationDto.builder()
                 .username("Username")
@@ -78,11 +79,11 @@ class LoginAndRegisterFacadeTest {
                 .build();
         loginAndRegisterFacade.register(registrationDto);
         //when
-        RegistrationResultDto secondRegistration = loginAndRegisterFacade.register(registrationDto);
-        //then
+        Throwable throwable = catchThrowable(() -> loginAndRegisterFacade.register(registrationDto));
+        // then
         assertAll(
-                () -> assertThat(secondRegistration.username()).isEqualTo(registrationDto.username()),
-                () -> assertThat(secondRegistration.isRegistered()).isEqualTo(false));
-
+                () -> assertThat(throwable).isInstanceOf(DuplicateKeyException.class)
+        );
     }
+
 }

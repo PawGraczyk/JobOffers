@@ -2,7 +2,6 @@ package pl.joboffers.controller.error;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.joboffers.BaseIntegrationTest;
 
@@ -10,22 +9,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class OfferUrlDuplicateKeyExceptionIntegrationTest extends BaseIntegrationTest {
+public class UserUsernameRegistrationDuplicateKeyExceptionIntegrationTest extends BaseIntegrationTest {
 
     @Test
-    @WithMockUser
-    public void should_return_409_conflict_when_added_offer_with_duplicate_offer_url() throws Exception {
-
+    public void should_return_409_conflict_when_registering_user_with_existing_username() throws Exception {
         // step 1
         // given && when
-        ResultActions firstPerform = mockMvc.perform(post("/offers").
+        ResultActions firstPerform = mockMvc.perform(post("/register").
                 content(
                         """
                                 {
-                                "company": "test",
-                                "title": "Junior Java Developer",
-                                "salary": "5000.00 PLN",
-                                "offerUrl": "www.example.com"
+                                "username": "someUsername",
+                                "password": "somePassword"
                                 }
                                 """.trim()
                 ).contentType(MediaType.APPLICATION_JSON)
@@ -36,28 +31,25 @@ public class OfferUrlDuplicateKeyExceptionIntegrationTest extends BaseIntegratio
 
         // step 2
         // given && when
-        ResultActions secondPerform = mockMvc.perform(post("/offers").
+        ResultActions secondPerform = mockMvc.perform(post("/register").
                 content(
                         """
                                 {
-                                "company": "test",
-                                "title": "Junior Java Developer",
-                                "salary": "5000.00 PLN",
-                                "offerUrl": "www.example.com"
+                                "username": "someUsername",
+                                "password": "somePassword"
                                 }
                                 """.trim()
                 ).contentType(MediaType.APPLICATION_JSON)
         );
         // then
         secondPerform.andExpect(status().isConflict())
-                .andExpect(content().json(
+                .andExpect((content().json(
                         """
-                                   {
-                                   "message": "Offer with given offer url already exists.",
+                                {
+                                   "message": "User with given username already exists",
                                    "status": "CONFLICT"
-                                   }
-                                   """
-                ));
-
+                                }
+                                """)));
     }
+
 }

@@ -22,12 +22,12 @@ public class LoginAndRegisterFacade {
     }
 
     public RegistrationResultDto register(RegistrationDto registrationDto) {
+        RegistrationResultDto registrationResultDto = new RegistrationResultDto();
         User user = UserMapper.mapFromRegistrationUserDtoToUser(registrationDto);
         User registeredUser = repository.save(user);
-        return RegistrationResultDto.builder()
-                .id(registeredUser.id())
-                .username(registeredUser.username())
-                .isRegistered(true)
-                .build();
+        registrationResultDto.setId(registeredUser.id());
+        registrationResultDto.setUsername(user.getUsername());
+        registrationResultDto.setRegistered(true);
+        return registrationResultDto;
     }
 }

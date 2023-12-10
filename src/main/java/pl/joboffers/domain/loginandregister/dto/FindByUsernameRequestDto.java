@@ -1,7 +1,13 @@
 package pl.joboffers.domain.loginandregister.dto;
 
-import lombok.Builder;
 
-@Builder
-public record FindByUsernameRequestDto(String username) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+@AllArgsConstructor
+public class FindByUsernameRequestDto {
+    private String username;
 }

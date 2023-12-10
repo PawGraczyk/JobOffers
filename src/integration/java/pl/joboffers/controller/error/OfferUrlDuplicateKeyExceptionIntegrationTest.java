@@ -18,46 +18,35 @@ public class OfferUrlDuplicateKeyExceptionIntegrationTest extends BaseIntegratio
 
         // step 1
         // given && when
-        ResultActions firstPerform = mockMvc.perform(post("/offers").
-                content(
-                        """
-                                {
-                                "company": "test",
-                                "title": "Junior Java Developer",
-                                "salary": "5000.00 PLN",
-                                "offerUrl": "www.example.com"
-                                }
-                                """.trim()
-                ).contentType(MediaType.APPLICATION_JSON)
-        );
+        ResultActions firstPerform = mockMvc.perform(post("/offers").content("""
+                {
+                "company": "test",
+                "title": "Junior Java Developer",
+                "salary": "5000.00 PLN",
+                "offerUrl": "www.example.com"
+                }
+                """.trim()).contentType(MediaType.APPLICATION_JSON));
 
         // then
         firstPerform.andExpect(status().isCreated());
 
         // step 2
         // given && when
-        ResultActions secondPerform = mockMvc.perform(post("/offers").
-                content(
-                        """
-                                {
-                                "company": "test",
-                                "title": "Junior Java Developer",
-                                "salary": "5000.00 PLN",
-                                "offerUrl": "www.example.com"
-                                }
-                                """.trim()
-                ).contentType(MediaType.APPLICATION_JSON)
-        );
+        ResultActions secondPerform = mockMvc.perform(post("/offers").content("""
+                {
+                "company": "test",
+                "title": "Junior Java Developer",
+                "salary": "5000.00 PLN",
+                "offerUrl": "www.example.com"
+                }
+                """.trim()).contentType(MediaType.APPLICATION_JSON));
         // then
-        secondPerform.andExpect(status().isConflict())
-                .andExpect(content().json(
-                        """
-                                   {
-                                   "message": "Offer with given offer url already exists.",
-                                   "status": "CONFLICT"
-                                   }
-                                   """
-                ));
+        secondPerform.andExpect(status().isConflict()).andExpect(content().json("""
+                {
+                "message": "Offer with given offer url already exists.",
+                "status": "CONFLICT"
+                }
+                """));
 
     }
 }

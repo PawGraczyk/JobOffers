@@ -1,22 +1,15 @@
 package pl.joboffers.domain.loginandregister;
 
-import pl.joboffers.domain.loginandregister.dto.RegistrationDto;
+import pl.joboffers.domain.loginandregister.dto.RegistrationUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
 
 class UserMapper {
 
     public static UserDto mapFromUserToUserDto(User user) {
-        return UserDto.builder()
-                .id(user.id())
-                .username(user.username())
-                .password(user.password())
-                .build();
+        return new UserDto(user.getId(), user.getUsername(), user.getPassword());
     }
 
-    public static User mapFromRegistrationUserDtoToUser(RegistrationDto registrationDto) {
-        return User.builder()
-                .username(registrationDto.username())
-                .password(registrationDto.password())
-                .build();
+    public static User mapFromRegistrationUserDtoToUser(RegistrationUserDto registrationDto) {
+        return new User(registrationDto.getUsername(), registrationDto.getPassword());
     }
 }

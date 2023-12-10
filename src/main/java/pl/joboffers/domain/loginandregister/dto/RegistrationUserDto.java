@@ -3,18 +3,11 @@ package pl.joboffers.domain.loginandregister.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-
-@AllArgsConstructor
 @Getter
-public class UserDto {
-    private String id;
-
+@AllArgsConstructor
+public class RegistrationUserDto {
     private String username;
 
     private String password;
 
-
 }
-
-
-

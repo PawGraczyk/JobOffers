@@ -38,8 +38,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(String authorizationToken) {
         String secretKey = properties.secret();
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        JWTVerifier verifier = JWT.require(algorithm)
-                .build();
+        JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT jwt = verifier.verify(authorizationToken.substring(7));
         return new UsernamePasswordAuthenticationToken(jwt.getSubject(), null, Collections.emptyList());
     }

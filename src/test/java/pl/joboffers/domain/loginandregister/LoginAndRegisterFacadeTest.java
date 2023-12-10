@@ -36,7 +36,9 @@ class LoginAndRegisterFacadeTest {
         //when
         Throwable throwable = catchThrowable(() -> loginAndRegisterFacade.findUserByUsername(requestDto));
         //then
-        assertAll(() -> assertThat(throwable).isInstanceOf(BadCredentialsException.class), () -> assertThat(throwable.getMessage()).isEqualTo("User not found."));
+        assertAll(
+                () -> assertThat(throwable).isInstanceOf(BadCredentialsException.class),
+                () -> assertThat(throwable.getMessage()).isEqualTo("User not found."));
     }
 
     @Test
@@ -46,7 +48,9 @@ class LoginAndRegisterFacadeTest {
         //when
         RegistrationResultDto registrationResultDto = loginAndRegisterFacade.register(registration);
         //then
-        assertAll(() -> assertThat(registrationResultDto.getUsername()).isEqualTo(registration.getUsername()), () -> assertThat(registrationResultDto.isRegistered()).isEqualTo(true));
+        assertAll(
+                () -> assertThat(registrationResultDto.getUsername()).isEqualTo(registration.getUsername()),
+                () -> assertThat(registrationResultDto.isRegistered()).isEqualTo(true));
     }
 
     @Test
@@ -57,7 +61,7 @@ class LoginAndRegisterFacadeTest {
         //when
         Throwable throwable = catchThrowable(() -> loginAndRegisterFacade.register(registration));
         // then
-        assertAll(() -> assertThat(throwable).isInstanceOf(DuplicateKeyException.class));
+        assertThat(throwable).isInstanceOf(DuplicateKeyException.class);
     }
 
 }

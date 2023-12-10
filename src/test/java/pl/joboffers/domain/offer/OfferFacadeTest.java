@@ -35,7 +35,8 @@ public class OfferFacadeTest {
         //when
         FindByIdRequestDto requestedId = new FindByIdRequestDto(5L);
         //then
-        assertThrows(OfferNotFoundException.class, () -> testOfferFacade.findOfferById(requestedId), "Offer not found");
+        assertThrows(OfferNotFoundException.class, () -> testOfferFacade
+                .findOfferById(requestedId), "Offer not found");
     }
 
     @Test
@@ -48,7 +49,13 @@ public class OfferFacadeTest {
         OfferResponseDto offerResponseDto = testOfferFacade.saveOffer(offerRequestDto);
 
         //then
-        assertThat(offerResponseDto).isEqualTo(OfferResponseDto.builder().id(offerResponseDto.id()).company(offerResponseDto.company()).title(offerResponseDto.title()).salary(offerResponseDto.salary()).offerUrl("www.example.com.pl").build());
+        assertThat(offerResponseDto).isEqualTo(OfferResponseDto.builder()
+                .id(offerResponseDto.id())
+                .company(offerResponseDto.company())
+                .title(offerResponseDto.title())
+                .salary(offerResponseDto.salary())
+                .offerUrl("www.example.com.pl")
+                .build());
     }
 
     @Test
@@ -60,7 +67,9 @@ public class OfferFacadeTest {
         // when
         testOfferFacade.saveOffer(offerRequestDto);
         //then
-        assertThrows(DuplicateKeyException.class, () -> testOfferFacade.saveOffer(offerRequestDto), String.format("Offer with offerUrl %s already exists in the database", offerRequestDto.offerUrl()));
+        assertThrows(DuplicateKeyException.class,
+                () -> testOfferFacade.saveOffer(offerRequestDto), String.format("Offer with offerUrl %s already exists in the database", offerRequestDto.offerUrl())
+        );
     }
 
     @Test
@@ -76,7 +85,8 @@ public class OfferFacadeTest {
         // when
         List<OfferResponseDto> offerResponseDtos = testOfferFacade.fetchRemoteOffersAndSaveIfNotExists();
         //then
-        assertThat(offerResponseDtos).containsExactlyInAnyOrder(new OfferResponseDto(6L, "TestCompany6", "TestTitle6", "TestSalary6", "UniqueUrl1"), new OfferResponseDto(7L, "TestCompany7", "TestTitle7", "TestSalary7", "UniqueUrl2"));
+        assertThat(offerResponseDtos).containsExactlyInAnyOrder(new OfferResponseDto(6L, "TestCompany6", "TestTitle6", "TestSalary6", "UniqueUrl1"),
+                new OfferResponseDto(7L, "TestCompany7", "TestTitle7", "TestSalary7", "UniqueUrl2"));
         assertThat(offerResponseDtos.size()).isEqualTo(2);
     }
 
@@ -91,7 +101,10 @@ public class OfferFacadeTest {
         // when
         List<OfferResponseDto> offerResponseDtos = testOfferFacade.fetchRemoteOffersAndSaveIfNotExists();
         //then
-        assertThat(offerResponseDtos).containsExactlyInAnyOrder(new OfferResponseDto(4L, "TestCompany4", "TestTitle4", "TestSalary4", "TestUrl4"), new OfferResponseDto(5L, "TestCompany5", "TestTitle5", "TestSalary5", "TestUrl5"), new OfferResponseDto(6L, "TestCompany6", "TestTitle6", "TestSalary6", "UniqueUrl1"), new OfferResponseDto(7L, "TestCompany7", "TestTitle7", "TestSalary7", "UniqueUrl2"));
+        assertThat(offerResponseDtos).containsExactlyInAnyOrder(new OfferResponseDto(4L, "TestCompany4", "TestTitle4", "TestSalary4", "TestUrl4"),
+                new OfferResponseDto(5L, "TestCompany5", "TestTitle5", "TestSalary5", "TestUrl5"),
+                new OfferResponseDto(6L, "TestCompany6", "TestTitle6", "TestSalary6", "UniqueUrl1"),
+                new OfferResponseDto(7L, "TestCompany7", "TestTitle7", "TestSalary7", "UniqueUrl2"));
         assertThat(offerResponseDtos.size()).isEqualTo(4);
     }
 
@@ -100,7 +113,12 @@ public class OfferFacadeTest {
         //given
         final Map<String, Offer> testData = new ConcurrentHashMap<>();
         var testOfferFacadeWithoutData = new OfferFacadeTestConfiguration().getOfferFacadeForTest(testData);
-        OfferRequestDto offerRequestDto = OfferRequestDto.builder().company("TestCompany").title("Title").salary("5000 - 10000 PLN").offerUrl("www.example.com.pl").build();
+        OfferRequestDto offerRequestDto = OfferRequestDto.builder()
+                .company("TestCompany")
+                .title("Title")
+                .salary("5000 - 10000 PLN")
+                .offerUrl("www.example.com.pl")
+                .build();
         //when
         OfferResponseDto offerResponseDto = testOfferFacadeWithoutData.saveOffer(offerRequestDto);
 

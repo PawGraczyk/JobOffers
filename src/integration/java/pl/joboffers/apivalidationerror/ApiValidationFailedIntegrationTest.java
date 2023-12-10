@@ -49,7 +49,15 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResult = performPostEmptyRequest.andExpect(status().isBadRequest()).andReturn();
         String json = mvcResult.getResponse().getContentAsString();
         ApiValidationErrorDto apiValidationErrorDto = objectMapper.readValue(json, ApiValidationErrorDto.class);
-        assertThat(apiValidationErrorDto.errorMessages()).containsExactlyInAnyOrder("Salary must not be null.", "Offer's url must not be empty.", "Company must not be null.", "Offer's url must not be null.", "Company must not be empty.", "Title must not be null.", "Title must not be empty.", "Salary must not be empty.");
+        assertThat(apiValidationErrorDto.errorMessages()).containsExactlyInAnyOrder(
+                "Salary must not be null.",
+                "Offer's url must not be empty.",
+                "Company must not be null.",
+                "Offer's url must not be null.",
+                "Company must not be empty.",
+                "Title must not be null.",
+                "Title must not be empty.",
+                "Salary must not be empty.");
 
 
     }

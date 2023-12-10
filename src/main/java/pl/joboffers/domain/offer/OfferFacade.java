@@ -40,6 +40,11 @@ public class OfferFacade {
     public List<OfferResponseDto> fetchRemoteOffersAndSaveIfNotExists() {
         List<RemoteJobOfferDto> fetchedRemoteJobOffers = fetcherFacade.fetchRemoteJobOffers();
 
-        return fetchedRemoteJobOffers.stream().filter(remoteJobOffer -> remoteJobOffer.offerUrl() != null).filter(remoteJobOffer -> !repository.existsByOfferUrl(remoteJobOffer.offerUrl())).map(remoteJobOffer -> OfferMapper.mapFromRemoteJobOfferToOffer(remoteJobOffer, sequenceGenerator.generateSequence(Offer.SEQUENCE_NAME))).map(repository::save).map(OfferMapper::mapFromOfferToOfferDto).collect(Collectors.toCollection(ArrayList::new));
+        return fetchedRemoteJobOffers.stream()
+                .filter(remoteJobOffer -> remoteJobOffer.offerUrl() != null)
+                .filter(remoteJobOffer -> !repository.existsByOfferUrl(remoteJobOffer.offerUrl()))
+                .map(remoteJobOffer -> OfferMapper.mapFromRemoteJobOfferToOffer(remoteJobOffer, sequenceGenerator.generateSequence(Offer.SEQUENCE_NAME)))
+                .map(repository::save).map(OfferMapper::mapFromOfferToOfferDto)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

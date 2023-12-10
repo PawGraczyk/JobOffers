@@ -27,5 +27,4 @@ public class ApiValidationErrorHandler {
         return e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toCollection(ArrayList::new));
     }
 
-
 }

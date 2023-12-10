@@ -16,6 +16,46 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @WithMockUser
+    public void should_return_400_and_validation_message_when_registering_user_does_have_empty_required_field() throws Exception {
+        //given
+        //when
+        ResultActions performPostNewOffer = mockMvc.perform(post("/register").content("""
+                {
+                "username": "someUser",
+                "password": "" 
+                }
+                """.trim()).contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        MvcResult mvcResult = performPostNewOffer.andExpect(status().isBadRequest()).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        ApiValidationErrorDto apiValidationErrorDto = objectMapper.readValue(json, ApiValidationErrorDto.class);
+        assertThat(apiValidationErrorDto.errorMessages()).contains("Password must not be empty.");
+    }
+
+
+    @Test
+    @WithMockUser
+    public void should_return_400_and_validation_message_when_register_request_is_empty() throws Exception {
+        //given
+        //when
+        ResultActions performPostNewOffer = mockMvc.perform(post("/register").content("""
+                {}
+                """.trim()).contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        MvcResult mvcResult = performPostNewOffer.andExpect(status().isBadRequest()).andReturn();
+        String json = mvcResult.getResponse().getContentAsString();
+        ApiValidationErrorDto apiValidationErrorDto = objectMapper.readValue(json, ApiValidationErrorDto.class);
+        assertThat(apiValidationErrorDto.errorMessages()).containsExactlyInAnyOrder(
+                "Username must not be empty.",
+                "Password must not be empty.",
+                "Username must not be null.",
+                "Password must not be null.");
+    }
+
+    @Test
+    @WithMockUser
     public void should_return_400_and_validation_message_when_request_does_have_empty_required_field() throws Exception {
         //given
         //when

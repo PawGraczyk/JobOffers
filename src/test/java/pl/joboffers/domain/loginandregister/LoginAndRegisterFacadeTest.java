@@ -25,7 +25,10 @@ class LoginAndRegisterFacadeTest {
         //when
         UserDto result = loginAndRegisterFacade.findUserByUsername(requestDto);
         //then
-        assertThat(result).isEqualTo(new UserDto(result.getId(), result.getUsername(), result.getPassword()));
+        assertAll(
+                ()-> result.getUsername().equals(registration.getUsername()),
+                ()-> result.getPassword().equals(registration.getPassword())
+        );
 
     }
 

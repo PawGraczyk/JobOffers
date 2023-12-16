@@ -1,5 +1,6 @@
 # JobOffers
-Web application designed for aggregation of job offers for Junior Java Developers from various sources, including websites and other web applications. The primary functionality of the application involves extracting current job listings from websites.
+Web application designed for aggregation of job offers for Junior Java Developers from various sources, including websites and other web applications. The primary functionality of the application involves extracting current job listings from websites.<br>
+Only registered and verified user (bearer authentication) can use application's endpoints.
 
 ## Specification
 - Java 16+,
@@ -12,7 +13,7 @@ Web application designed for aggregation of job offers for Junior Java Developer
 - Scheduler used for fetching new, unique offers periodically,  
 - As for now it is a pure backend application. 
 
-## Installation
+## Installation and testing
 [Docker Desktop](https://www.docker.com/products/docker-desktop/) is required for the application to run.
 
 Docker files:<br>
@@ -22,3 +23,10 @@ b) Mongo-db admin role initialization - **[init-mongo.js](https://github.com/pgr
 Application endpoints can be tested using [Postman](https://www.postman.com/) or Swagger UI (default address: http://localhost:8080/swagger-ui/index.html).
 
 
+|       ENDPOINT        | METHOD |         REQUEST          | RESPONSE |             FUNCTION                           |
+|:---------------------:|:------:|:------------------------:|:--------:|:----------------------------------------------:|
+|    /register          |  POST | JSON (username, password) |   JSON   | Registers unique user (based on username)       |
+|    /token             |  POST | JSON (username, password) |   JSON   | Retrieves token for the registered user (login) |
+|    /offers            |  GET  | --                        |   JSON   | Retrieves all saved offers from the database    |
+|    /offers/{id}       |  GET  | PATH VARIABLE (id)        |   JSON   | Retrieves offer with the given id               |
+|    /offers            |  POST | JSON (company, title, salary, offerUrl) | JSON |Adds new, unique offer (based on offerUrl) to the database|

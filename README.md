@@ -7,8 +7,8 @@ Web application designed for aggregation of job offers for Junior Java Developer
 - Facade design pattern,
 - NoSQL database (MongoDB) for offer and user repositories,
 - Unit tests covering each of the modules,
-- "Happy path" integration test (offers external API stubbed using WireMock)
-- Scheduler used for fetching new, unique offers periodically  
+- "Happy path" integration test (offers external API stubbed using WireMock),
+- Scheduler used for fetching new, unique offers periodically,  
 - As for now it is a pure backend application. 
 
 ## Installation

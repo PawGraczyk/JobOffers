@@ -2,7 +2,7 @@
 Web application designed for aggregation of job offers for Junior Java Developers from various sources, including websites and other web applications. The primary functionality of the application involves extracting current job listings from websites.<br>
 Only registered and verified user (bearer authentication) can use application's endpoints (besides /register and /token).
 
-## Specification
+## Details
 - Java 16+,
 - Spring Boot web application,
 - Modular monolith hexagonal architecture,

@@ -3,7 +3,7 @@ Web application designed for aggregation of job offers for Junior Java Developer
 Only registered and verified user (bearer authentication) can use application's endpoints (besides /register and /token).
 
 ## Details
-- Java 16+,
+- Java 17+,
 - Spring Boot web application,
 - Modular monolith hexagonal architecture,
 - Facade design pattern,
